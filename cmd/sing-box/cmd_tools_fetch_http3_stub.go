@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"os"
 
-	box "github.com/konglong147/securefile/"
+	box "github.com/konglong147/securefile"
 )
 
 func initializeHTTP3Client(instance *box.Box) error {

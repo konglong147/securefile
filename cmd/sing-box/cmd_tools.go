@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/konglong147/securefile/"
+	"github.com/konglong147/securefile"
 	E "github.com/sagernet/sing/common/exceptions"
 	N "github.com/sagernet/sing/common/network"
 
