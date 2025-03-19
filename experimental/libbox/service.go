@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/sagernet/sing-box"
+	"github.com/konglong147/securefile"
 	"github.com/konglong147/securefile/adapter"
 	"github.com/konglong147/securefile/common/process"
 	"github.com/konglong147/securefile/common/urltest"

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/sagernet/sing-box"
+	"github.com/konglong147/securefile"
 	"github.com/konglong147/securefile/log"
 
 	"github.com/spf13/cobra"
