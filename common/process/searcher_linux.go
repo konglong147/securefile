@@ -6,7 +6,7 @@ import (
 	"context"
 	"net/netip"
 
-	"github.com/sagernet/sing-box/log"
+	"github.com/konglong147/securefile/log"
 )
 
 var _ Searcher = (*linuxSearcher)(nil)

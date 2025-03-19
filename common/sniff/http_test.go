@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sagernet/sing-box/adapter"
-	"github.com/sagernet/sing-box/common/sniff"
+	"github.com/konglong147/securefile/adapter"
+	"github.com/konglong147/securefile/common/sniff"
 
 	"github.com/stretchr/testify/require"
 )

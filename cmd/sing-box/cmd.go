@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/sagernet/sing-box/experimental/deprecated"
-	_ "github.com/sagernet/sing-box/include"
-	"github.com/sagernet/sing-box/log"
+	"github.com/konglong147/securefile/experimental/deprecated"
+	_ "github.com/konglong147/securefile/include"
+	"github.com/konglong147/securefile/log"
 	"github.com/sagernet/sing/service"
 	"github.com/sagernet/sing/service/filemanager"
 

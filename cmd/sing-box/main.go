@@ -2,7 +2,7 @@
 
 package main
 
-import "github.com/sagernet/sing-box/log"
+import "github.com/konglong147/securefile/log"
 
 func main() {
 	if err := mainCommand.Execute(); err != nil {

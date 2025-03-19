@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/sagernet/sing-box/option"
+	"github.com/konglong147/securefile/option"
 	E "github.com/sagernet/sing/common/exceptions"
 	"github.com/sagernet/sing/common/ntp"
 )

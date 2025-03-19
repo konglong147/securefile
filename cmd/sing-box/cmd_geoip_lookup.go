@@ -4,7 +4,7 @@ import (
 	"net/netip"
 	"os"
 
-	"github.com/sagernet/sing-box/log"
+	"github.com/konglong147/securefile/log"
 	E "github.com/sagernet/sing/common/exceptions"
 	N "github.com/sagernet/sing/common/network"
 

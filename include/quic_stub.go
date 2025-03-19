@@ -5,11 +5,11 @@ package include
 import (
 	"context"
 
-	"github.com/sagernet/sing-box/adapter"
-	"github.com/sagernet/sing-box/common/tls"
-	C "github.com/sagernet/sing-box/constant"
-	"github.com/sagernet/sing-box/option"
-	"github.com/sagernet/sing-box/transport/v2ray"
+	"github.com/konglong147/securefile/adapter"
+	"github.com/konglong147/securefile/common/tls"
+	C "github.com/konglong147/securefile/constant"
+	"github.com/konglong147/securefile/option"
+	"github.com/konglong147/securefile/transport/v2ray"
 	"github.com/sagernet/sing-dns"
 	M "github.com/sagernet/sing/common/metadata"
 	N "github.com/sagernet/sing/common/network"

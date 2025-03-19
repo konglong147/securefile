@@ -5,7 +5,7 @@ import (
 	"net/netip"
 	"sync"
 
-	C "github.com/sagernet/sing-box/constant"
+	C "github.com/konglong147/securefile/constant"
 	"github.com/sagernet/sing-tun"
 	"github.com/sagernet/sing/common"
 	E "github.com/sagernet/sing/common/exceptions"

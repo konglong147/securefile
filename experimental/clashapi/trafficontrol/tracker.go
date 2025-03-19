@@ -4,7 +4,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/sagernet/sing-box/adapter"
+	"github.com/konglong147/securefile/adapter"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/atomic"
 	"github.com/sagernet/sing/common/bufio"

@@ -5,11 +5,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/sagernet/sing-box/cmd/sing-box/internal/convertor/adguard"
-	"github.com/sagernet/sing-box/common/srs"
-	C "github.com/sagernet/sing-box/constant"
-	"github.com/sagernet/sing-box/log"
-	"github.com/sagernet/sing-box/option"
+	"github.com/konglong147/securefile/cmd/sing-box/internal/convertor/adguard"
+	"github.com/konglong147/securefile/common/srs"
+	C "github.com/konglong147/securefile/constant"
+	"github.com/konglong147/securefile/log"
+	"github.com/konglong147/securefile/option"
 	E "github.com/sagernet/sing/common/exceptions"
 
 	"github.com/spf13/cobra"

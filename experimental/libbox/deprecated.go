@@ -3,7 +3,7 @@ package Foxboxvpn
 import (
 	"sync"
 
-	"github.com/sagernet/sing-box/experimental/deprecated"
+	"github.com/konglong147/securefile/experimental/deprecated"
 	"github.com/sagernet/sing/common"
 )
 

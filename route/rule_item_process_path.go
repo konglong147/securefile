@@ -3,7 +3,7 @@ package route
 import (
 	"strings"
 
-	"github.com/sagernet/sing-box/adapter"
+	"github.com/konglong147/securefile/adapter"
 )
 
 var _ RuleItem = (*ProcessPathItem)(nil)

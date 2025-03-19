@@ -3,7 +3,7 @@
 package inbound
 
 import (
-	C "github.com/sagernet/sing-box/constant"
+	C "github.com/konglong147/securefile/constant"
 )
 
 func (n *Naive) configureHTTP3Listener() error {

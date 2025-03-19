@@ -3,9 +3,9 @@ package platform
 import (
 	"context"
 
-	"github.com/sagernet/sing-box/adapter"
-	"github.com/sagernet/sing-box/common/process"
-	"github.com/sagernet/sing-box/option"
+	"github.com/konglong147/securefile/adapter"
+	"github.com/konglong147/securefile/common/process"
+	"github.com/konglong147/securefile/option"
 	"github.com/sagernet/sing-tun"
 	"github.com/sagernet/sing/common/control"
 	"github.com/sagernet/sing/common/logger"

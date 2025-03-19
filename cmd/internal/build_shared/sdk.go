@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sagernet/sing-box/log"
+	"github.com/konglong147/securefile/log"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/rw"
 )

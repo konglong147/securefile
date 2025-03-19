@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"os"
 
-	C "github.com/sagernet/sing-box/constant"
-	"github.com/sagernet/sing-box/log"
+	C "github.com/konglong147/securefile/constant"
+	"github.com/konglong147/securefile/log"
 	"github.com/sagernet/sing/common/bufio"
 	E "github.com/sagernet/sing/common/exceptions"
 	M "github.com/sagernet/sing/common/metadata"

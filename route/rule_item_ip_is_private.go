@@ -3,7 +3,7 @@ package route
 import (
 	"net/netip"
 
-	"github.com/sagernet/sing-box/adapter"
+	"github.com/konglong147/securefile/adapter"
 	N "github.com/sagernet/sing/common/network"
 )
 

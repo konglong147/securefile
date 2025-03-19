@@ -1,7 +1,7 @@
 package Foxboxvpn
 
 import (
-	"github.com/sagernet/sing-box/option"
+	"github.com/konglong147/securefile/option"
 )
 
 type PlatformInterface interface {

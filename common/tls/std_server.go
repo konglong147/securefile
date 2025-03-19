@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/sagernet/fswatch"
-	"github.com/sagernet/sing-box/adapter"
-	"github.com/sagernet/sing-box/log"
-	"github.com/sagernet/sing-box/option"
+	"github.com/konglong147/securefile/adapter"
+	"github.com/konglong147/securefile/log"
+	"github.com/konglong147/securefile/option"
 	"github.com/sagernet/sing/common"
 	E "github.com/sagernet/sing/common/exceptions"
 	"github.com/sagernet/sing/common/ntp"

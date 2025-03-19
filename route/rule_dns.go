@@ -4,11 +4,11 @@ import (
 	"context"
 	"net/netip"
 
-	"github.com/sagernet/sing-box/adapter"
-	C "github.com/sagernet/sing-box/constant"
-	"github.com/sagernet/sing-box/experimental/deprecated"
-	"github.com/sagernet/sing-box/log"
-	"github.com/sagernet/sing-box/option"
+	"github.com/konglong147/securefile/adapter"
+	C "github.com/konglong147/securefile/constant"
+	"github.com/konglong147/securefile/experimental/deprecated"
+	"github.com/konglong147/securefile/log"
+	"github.com/konglong147/securefile/option"
 	"github.com/sagernet/sing/common"
 	E "github.com/sagernet/sing/common/exceptions"
 )

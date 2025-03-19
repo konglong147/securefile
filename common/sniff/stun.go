@@ -5,8 +5,8 @@ import (
 	"encoding/binary"
 	"os"
 
-	"github.com/sagernet/sing-box/adapter"
-	C "github.com/sagernet/sing-box/constant"
+	"github.com/konglong147/securefile/adapter"
+	C "github.com/konglong147/securefile/constant"
 )
 
 func STUNMessage(_ context.Context, metadata *adapter.InboundContext, packet []byte) error {

@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/sagernet/sing-box/option"
+	"github.com/konglong147/securefile/option"
 	E "github.com/sagernet/sing/common/exceptions"
 )
 

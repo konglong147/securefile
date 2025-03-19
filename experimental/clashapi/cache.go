@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/sagernet/sing-box/adapter"
+	"github.com/konglong147/securefile/adapter"
 	"github.com/sagernet/sing/service"
 
 	"github.com/go-chi/chi/v5"

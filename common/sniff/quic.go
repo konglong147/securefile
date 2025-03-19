@@ -10,10 +10,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/sagernet/sing-box/adapter"
-	"github.com/sagernet/sing-box/common/ja3"
-	"github.com/sagernet/sing-box/common/sniff/internal/qtls"
-	C "github.com/sagernet/sing-box/constant"
+	"github.com/konglong147/securefile/adapter"
+	"github.com/konglong147/securefile/common/ja3"
+	"github.com/konglong147/securefile/common/sniff/internal/qtls"
+	C "github.com/konglong147/securefile/constant"
 	"github.com/sagernet/sing/common/buf"
 	E "github.com/sagernet/sing/common/exceptions"
 

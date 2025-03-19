@@ -1,0 +1,8 @@
+framework module "Foxboxvpn" {
+	header "ref.h"
+    header "Foxboxvpn.objc.h"
+    header "Universe.objc.h"
+    header "Foxboxvpn.h"
+
+    export *
+}

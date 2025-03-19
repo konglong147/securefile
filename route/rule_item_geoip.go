@@ -4,8 +4,8 @@ import (
 	"net/netip"
 	"strings"
 
-	"github.com/sagernet/sing-box/adapter"
-	"github.com/sagernet/sing-box/log"
+	"github.com/konglong147/securefile/adapter"
+	"github.com/konglong147/securefile/log"
 	N "github.com/sagernet/sing/common/network"
 )
 

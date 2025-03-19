@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/sagernet/sing-box/log"
+	"github.com/konglong147/securefile/log"
 
 	"github.com/gofrs/uuid/v5"
 	"github.com/spf13/cobra"
