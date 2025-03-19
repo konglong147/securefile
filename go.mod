@@ -1,4 +1,4 @@
-module github.com/sagernet/sing-box
+module github.com/konglong147/securefile
 
 go 1.20
 
