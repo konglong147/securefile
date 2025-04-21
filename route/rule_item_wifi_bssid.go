@@ -4,34 +4,34 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	F "github.com/sagernet/sing/common/format"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-var _ RuleItem = (*WIFIBSSIDItem)(nil)
+var _ RuleItem = (*XinWangGoBaqpe)(nil)
 
-type WIFIBSSIDItem struct {
+type XinWangGoBaqpe struct {
 	bssidList []string
 	bssidMap  map[string]bool
 	router    adapter.Router
 }
 
-func NewWIFIBSSIDItem(router adapter.Router, bssidList []string) *WIFIBSSIDItem {
+func NewXinWangGoBaqpe(router adapter.Router, bssidList []string) *XinWangGoBaqpe {
 	bssidMap := make(map[string]bool)
 	for _, bssid := range bssidList {
 		bssidMap[bssid] = true
 	}
-	return &WIFIBSSIDItem{
+	return &XinWangGoBaqpe{
 		bssidList,
 		bssidMap,
 		router,
 	}
 }
 
-func (r *WIFIBSSIDItem) Match(metadata *adapter.InboundContext) bool {
+func (r *XinWangGoBaqpe) Match(metadata *adapter.InboundContext) bool {
 	return r.bssidMap[r.router.WIFIState().BSSID]
 }
 
-func (r *WIFIBSSIDItem) String() string {
+func (r *XinWangGoBaqpe) String() string {
 	if len(r.bssidList) == 1 {
 		return F.ToString("wifi_bssid=", r.bssidList[0])
 	}

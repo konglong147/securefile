@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/konglong147/securefile/common/urltest"
-	"github.com/sagernet/sing-dns"
-	N "github.com/sagernet/sing/common/network"
-	"github.com/sagernet/sing/common/varbin"
+	"github.com/konglong147/securefile/local/sing-dns"
+	N "github.com/konglong147/securefile/local/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common/varbin"
 )
 
 type ClashServer interface {

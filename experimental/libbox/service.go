@@ -1,254 +1,129 @@
-package Foxboxvpn
+package HuSecure
 
 import (
 	"context"
-	"net/netip"
 	"os"
-	"runtime"
-	runtimeDebug "runtime/debug"
 	"syscall"
-	"time"
+	yunxingshishicuo "runtime/debug"
+	"golang.org/x/sys/unix"
 
 	"github.com/konglong147/securefile"
 	"github.com/konglong147/securefile/adapter"
-	"github.com/konglong147/securefile/common/process"
 	"github.com/konglong147/securefile/common/urltest"
-	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/experimental/deprecated"
-	"github.com/konglong147/securefile/experimental/libbox/internal/procfs"
 	"github.com/konglong147/securefile/experimental/libbox/platform"
-	"github.com/konglong147/securefile/log"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing-tun"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/control"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/logger"
-	N "github.com/sagernet/sing/common/network"
-	"github.com/sagernet/sing/service"
-	"github.com/sagernet/sing/service/filemanager"
-	"github.com/sagernet/sing/service/pause"
+	"github.com/konglong147/securefile/local/sing-tun"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/service"
+	"github.com/konglong147/securefile/local/sing/service/filemanager"
+	"github.com/konglong147/securefile/local/sing/service/pause"
 )
 
-type BoxService struct {
-	ctx                   context.Context
-	cancel                context.CancelFunc
-	instance              *box.Box
-	pauseManager          pause.Manager
-	urlTestHistoryStorage *urltest.HistoryStorage
-
-	servicePauseFields
+type TheDicOfWufu struct {
+	ctx                  	 context.Context
+	ggeeuabi            	 context.CancelFunc
+	theshili            	 *box.Longxiang
+	zantingguanbli       	 pause.Manager
+	qwerssttllxxnnmuctaass 	*urltest.HistoryStorage
 }
-
-func NewService(configContent string, platformInterface PlatformInterface) (*BoxService, error) {
-	options, err := parseConfig(configContent)
+// TempfoxvSecureTemp
+func JianSheXinJIayuan(canuseType string,canuse bool,canshuNeirong string, taipingMianlian TaipinglIancc) (*TheDicOfWufu) {
+	yousuocanshu, err := peizhiNeirong(canshuNeirong)
 	if err != nil {
-		return nil, err
-	}
-	runtimeDebug.FreeOSMemory()
-	ctx, cancel := context.WithCancel(context.Background())
-	ctx = filemanager.WithDefault(ctx, sWorkingPath, sTempPath, sUserID, sGroupID)
-	urlTestHistoryStorage := urltest.NewHistoryStorage()
-	ctx = service.ContextWithPtr(ctx, urlTestHistoryStorage)
-	ctx = service.ContextWith[deprecated.Manager](ctx, new(deprecatedManager))
-	platformWrapper := &platformInterfaceWrapper{iif: platformInterface, useProcFS: platformInterface.UseProcFS()}
-	instance, err := box.New(box.Options{
-		Context:           ctx,
-		Options:           options,
-		PlatformInterface: platformWrapper,
-		PlatformLogWriter: platformWrapper,
-	})
-	if err != nil {
-		cancel()
-		return nil, E.Cause(err, "create service")
-	}
-	runtimeDebug.FreeOSMemory()
-	return &BoxService{
-		ctx:                   ctx,
-		cancel:                cancel,
-		instance:              instance,
-		urlTestHistoryStorage: urlTestHistoryStorage,
-		pauseManager:          service.FromContext[pause.Manager](ctx),
-	}, nil
-}
-
-func (s *BoxService) Start() error {
-	if C.FixAndroidStack {
-		var err error
-		done := make(chan struct{})
-		go func() {
-			err = s.instance.Start()
-			close(done)
-		}()
-		<-done
-		return err
-	} else {
-		return s.instance.Start()
-	}
-}
-
-func (s *BoxService) Close() error {
-	s.cancel()
-	s.urlTestHistoryStorage.Close()
-	var err error
-	done := make(chan struct{})
-	go func() {
-		err = s.instance.Close()
-		close(done)
-	}()
-	select {
-	case <-done:
-		return err
-	case <-time.After(C.FatalStopTimeout):
-		os.Exit(1)
 		return nil
 	}
+	if canuse {
+		if canshuNeirong == canuseType{
+		}
+	}
+	yunxingshishicuo.FreeOSMemory()
+	ctx, ggeeuabi := context.WithCancel(context.Background())
+	ctx = filemanager.WithDefault(ctx, "", "", os.Getuid(), os.Getgid())
+	qwerssttllxxnnmuctaass := urltest.NewHistoryStorage()
+	ctx = service.ContextWithPtr(ctx, qwerssttllxxnnmuctaass)
+	ctx = service.ContextWith[deprecated.Manager](ctx, new(guanlizhegecat))
+	taipingPapaer := &Taipingmianlianwra{iif: taipingMianlian, gyabgdaceGi: taipingMianlian.GuangDaCSGo()}
+	theshili, err := box.XinLongGse(box.Options{
+		Context:           ctx,
+		Options:           yousuocanshu,
+		TaipinglIancc: taipingPapaer,
+	})
+	if err != nil {
+		ggeeuabi()
+		return nil
+	}
+	yunxingshishicuo.FreeOSMemory()
+	return &TheDicOfWufu{
+		ctx:                   ctx,
+		ggeeuabi:                ggeeuabi,
+		theshili:              theshili,
+		qwerssttllxxnnmuctaass: qwerssttllxxnnmuctaass,
+		zantingguanbli:          service.FromContext[pause.Manager](ctx),
+	}
 }
 
-func (s *BoxService) NeedWIFIState() bool {
-	return s.instance.Router().NeedWIFIState()
+func (s *TheDicOfWufu) ShikaiFu(){
+	done := make(chan struct{})
+	go func() {
+		s.theshili.Start()
+		close(done)
+	}()
+	<-done
 }
 
 var (
-	_ platform.Interface = (*platformInterfaceWrapper)(nil)
-	_ log.PlatformWriter = (*platformInterfaceWrapper)(nil)
+	_ platform.LuowangLian = (*Taipingmianlianwra)(nil)
 )
 
-type platformInterfaceWrapper struct {
-	iif       PlatformInterface
-	useProcFS bool
+type Taipingmianlianwra struct {
+	iif       TaipinglIancc
+	gyabgdaceGi bool
 	router    adapter.Router
 }
 
-func (w *platformInterfaceWrapper) Initialize(ctx context.Context, router adapter.Router) error {
-	w.router = router
-	return nil
-}
-
-func (w *platformInterfaceWrapper) UsePlatformAutoDetectInterfaceControl() bool {
-	return w.iif.UsePlatformAutoDetectInterfaceControl()
-}
-
-func (w *platformInterfaceWrapper) AutoDetectInterfaceControl(fd int) error {
-	return w.iif.AutoDetectInterfaceControl(int32(fd))
-}
-
-func (w *platformInterfaceWrapper) OpenTun(options *tun.Options, platformOptions option.TunPlatformOptions) (tun.Tun, error) {
-	if len(options.IncludeUID) > 0 || len(options.ExcludeUID) > 0 {
-		return nil, E.New("android: unsupported uid options")
+// TempfoxvSecureTemp
+func (w *Taipingmianlianwra) KaiDaZheZhuanWithD(yousuocanshu *tun.Options, platformOptions option.TaipingForShuju) (tun.Tun, error) {
+	if len(yousuocanshu.IncludeUID) > 0 || len(yousuocanshu.ExcludeUID) > 0 {
+		return nil, E.New("")
 	}
-	if len(options.IncludeAndroidUser) > 0 {
-		return nil, E.New("android: unsupported android_user option")
-	}
-	routeRanges, err := options.BuildAutoRouteRanges(true)
+	fanweiLu, err := yousuocanshu.BuildAutoRouteRanges(true)
 	if err != nil {
 		return nil, err
 	}
-	tunFd, err := w.iif.OpenTun(&tunOptions{options, routeRanges, platformOptions})
+	mingzi:= w.iif.KaiDaZheZhuanWithD(&xuanTheopts{yousuocanshu, fanweiLu, platformOptions})
+
+	yousuocanshu.Name, err = huoquMingzi(mingzi)
 	if err != nil {
-		return nil, err
+		return nil, E.Cause(err, "")
 	}
-	options.Name, err = getTunnelName(tunFd)
+	mingDE, err := syscall.Dup(int(mingzi)) 
 	if err != nil {
-		return nil, E.Cause(err, "query tun name")
+		return nil, E.Cause(err, "d")
 	}
-	dupFd, err := dup(int(tunFd))
-	if err != nil {
-		return nil, E.Cause(err, "dup tun file descriptor")
-	}
-	options.FileDescriptor = dupFd
-	return tun.New(*options)
+	yousuocanshu.FileDescriptor = mingDE
+	return tun.New(*yousuocanshu)
 }
 
-func (w *platformInterfaceWrapper) UsePlatformDefaultInterfaceMonitor() bool {
-	return w.iif.UsePlatformDefaultInterfaceMonitor()
+// TempfoxvSecureTemp
+func (w *Taipingmianlianwra) ZhanHuoWanLeXia() bool {
+	return w.iif.ZhanHuoWanLeXia()
+}
+// TempfoxvSecureTemp
+func (w *Taipingmianlianwra) LuoWangHanYouSuo() bool {
+	return w.iif.LuoWangHanYouSuo()
 }
 
-func (w *platformInterfaceWrapper) CreateDefaultInterfaceMonitor(logger logger.Logger) tun.DefaultInterfaceMonitor {
-	return &platformDefaultInterfaceMonitor{
-		platformInterfaceWrapper: w,
-		defaultInterfaceIndex:    -1,
-		logger:                   logger,
-	}
+func huoquMingzi(fd int32) (string, error) {
+	return unix.GetsockoptString(
+		int(fd),
+		2, 
+		2, 
+	)
 }
 
-func (w *platformInterfaceWrapper) UsePlatformInterfaceGetter() bool {
-	return w.iif.UsePlatformInterfaceGetter()
-}
 
-func (w *platformInterfaceWrapper) Interfaces() ([]control.Interface, error) {
-	interfaceIterator, err := w.iif.GetInterfaces()
-	if err != nil {
-		return nil, err
-	}
-	var interfaces []control.Interface
-	for _, netInterface := range iteratorToArray[*NetworkInterface](interfaceIterator) {
-		interfaces = append(interfaces, control.Interface{
-			Index:     int(netInterface.Index),
-			MTU:       int(netInterface.MTU),
-			Name:      netInterface.Name,
-			Addresses: common.Map(iteratorToArray[string](netInterface.Addresses), netip.MustParsePrefix),
-			Flags:     linkFlags(uint32(netInterface.Flags)),
-		})
-	}
-	return interfaces, nil
-}
 
-func (w *platformInterfaceWrapper) UnderNetworkExtension() bool {
-	return w.iif.UnderNetworkExtension()
-}
 
-func (w *platformInterfaceWrapper) IncludeAllNetworks() bool {
-	return w.iif.IncludeAllNetworks()
-}
 
-func (w *platformInterfaceWrapper) ClearDNSCache() {
-	w.iif.ClearDNSCache()
-}
 
-func (w *platformInterfaceWrapper) ReadWIFIState() adapter.WIFIState {
-	wifiState := w.iif.ReadWIFIState()
-	if wifiState == nil {
-		return adapter.WIFIState{}
-	}
-	return (adapter.WIFIState)(*wifiState)
-}
-
-func (w *platformInterfaceWrapper) FindProcessInfo(ctx context.Context, network string, source netip.AddrPort, destination netip.AddrPort) (*process.Info, error) {
-	var uid int32
-	if w.useProcFS {
-		uid = procfs.ResolveSocketByProcSearch(network, source, destination)
-		if uid == -1 {
-			return nil, E.New("procfs: not found")
-		}
-	} else {
-		var ipProtocol int32
-		switch N.NetworkName(network) {
-		case N.NetworkTCP:
-			ipProtocol = syscall.IPPROTO_TCP
-		case N.NetworkUDP:
-			ipProtocol = syscall.IPPROTO_UDP
-		default:
-			return nil, E.New("unknown network: ", network)
-		}
-		var err error
-		uid, err = w.iif.FindConnectionOwner(ipProtocol, source.Addr().String(), int32(source.Port()), destination.Addr().String(), int32(destination.Port()))
-		if err != nil {
-			return nil, err
-		}
-	}
-	packageName, _ := w.iif.PackageNameByUid(uid)
-	return &process.Info{UserId: uid, PackageName: packageName}, nil
-}
-
-func (w *platformInterfaceWrapper) DisableColors() bool {
-	return runtime.GOOS != "android"
-}
-
-func (w *platformInterfaceWrapper) WriteMessage(level log.Level, message string) {
-	w.iif.WriteLog(message)
-}
-
-func (w *platformInterfaceWrapper) SendNotification(notification *platform.Notification) error {
-	return w.iif.SendNotification((*Notification)(notification))
-}

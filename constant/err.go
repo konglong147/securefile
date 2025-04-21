@@ -1,6 +1,6 @@
 package constant
 
-import E "github.com/sagernet/sing/common/exceptions"
+import E "github.com/konglong147/securefile/local/sing/common/exceptions"
 
 var ErrTLSRequired = E.New("TLS required")
 

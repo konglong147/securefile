@@ -4,9 +4,9 @@ import (
 	"context"
 	"net"
 
-	"github.com/sagernet/sing/common/buf"
-	E "github.com/sagernet/sing/common/exceptions"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common/buf"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type ConnectionHandler interface {

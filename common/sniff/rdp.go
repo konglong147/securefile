@@ -8,7 +8,7 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common/rw"
+	"github.com/konglong147/securefile/local/sing/common/rw"
 )
 
 func RDP(_ context.Context, metadata *adapter.InboundContext, reader io.Reader) error {

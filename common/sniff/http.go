@@ -7,8 +7,8 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
-	M "github.com/sagernet/sing/common/metadata"
-	"github.com/sagernet/sing/protocol/http"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	"github.com/konglong147/securefile/local/sing/protocol/http"
 )
 
 func HTTPHost(_ context.Context, metadata *adapter.InboundContext, reader io.Reader) error {

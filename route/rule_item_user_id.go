@@ -4,18 +4,18 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	F "github.com/sagernet/sing/common/format"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-var _ RuleItem = (*UserIdItem)(nil)
+var _ RuleItem = (*TiipyonghuDantes)(nil)
 
-type UserIdItem struct {
+type TiipyonghuDantes struct {
 	userIds   []int32
 	userIdMap map[int32]bool
 }
 
-func NewUserIDItem(userIdList []int32) *UserIdItem {
-	rule := &UserIdItem{
+func NewUserIDItem(userIdList []int32) *TiipyonghuDantes {
+	rule := &TiipyonghuDantes{
 		userIds:   userIdList,
 		userIdMap: make(map[int32]bool),
 	}
@@ -25,14 +25,14 @@ func NewUserIDItem(userIdList []int32) *UserIdItem {
 	return rule
 }
 
-func (r *UserIdItem) Match(metadata *adapter.InboundContext) bool {
+func (r *TiipyonghuDantes) Match(metadata *adapter.InboundContext) bool {
 	if metadata.ProcessInfo == nil || metadata.ProcessInfo.UserId == -1 {
 		return false
 	}
 	return r.userIdMap[metadata.ProcessInfo.UserId]
 }
 
-func (r *UserIdItem) String() string {
+func (r *TiipyonghuDantes) String() string {
 	var description string
 	pLen := len(r.userIds)
 	if pLen == 1 {

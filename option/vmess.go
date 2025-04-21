@@ -5,7 +5,7 @@ type VMessInboundOptions struct {
 	Users []VMessUser `json:"users,omitempty"`
 	InboundTLSOptionsContainer
 	Multiplex *InboundMultiplexOptions `json:"multiplex,omitempty"`
-	Transport *V2RayTransportOptions   `json:"transport,omitempty"`
+	Transport *VtuoBirtereJstosole   `json:"transport,omitempty"`
 }
 
 type VMessUser struct {
@@ -26,5 +26,5 @@ type VMessOutboundOptions struct {
 	OutboundTLSOptionsContainer
 	PacketEncoding string                    `json:"packet_encoding,omitempty"`
 	Multiplex      *OutboundMultiplexOptions `json:"multiplex,omitempty"`
-	Transport      *V2RayTransportOptions    `json:"transport,omitempty"`
+	Transport      *VtuoBirtereJstosole    `json:"transport,omitempty"`
 }

@@ -4,24 +4,19 @@ import (
 	"context"
 	"io"
 	"os"
-	"time"
 
-	"github.com/sagernet/sing/common"
-	F "github.com/sagernet/sing/common/format"
-	"github.com/sagernet/sing/common/observable"
-	"github.com/sagernet/sing/service/filemanager"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/observable"
+	"github.com/konglong147/securefile/local/sing/service/filemanager"
 )
 
 var _ Factory = (*defaultFactory)(nil)
 
 type defaultFactory struct {
 	ctx               context.Context
-	formatter         Formatter
-	platformFormatter Formatter
 	writer            io.Writer
 	file              *os.File
 	filePath          string
-	platformWriter    PlatformWriter
 	needObservable    bool
 	level             Level
 	subscriber        *observable.Subscriber[Entry]
@@ -29,32 +24,10 @@ type defaultFactory struct {
 }
 
 func NewDefaultFactory(
-	ctx context.Context,
-	formatter Formatter,
-	writer io.Writer,
-	filePath string,
-	platformWriter PlatformWriter,
-	needObservable bool,
+	
 ) ObservableFactory {
 	factory := &defaultFactory{
-		ctx:       ctx,
-		formatter: formatter,
-		platformFormatter: Formatter{
-			BaseTime:         formatter.BaseTime,
-			DisableLineBreak: true,
-		},
-		writer:         writer,
-		filePath:       filePath,
-		platformWriter: platformWriter,
-		needObservable: needObservable,
-		level:          LevelTrace,
 		subscriber:     observable.NewSubscriber[Entry](128),
-	}
-	if platformWriter != nil {
-		factory.platformFormatter.DisableColors = platformWriter.DisableColors()
-	}
-	if needObservable {
-		factory.observer = observable.NewObserver[Entry](factory.subscriber, 64)
 	}
 	return factory
 }
@@ -110,34 +83,7 @@ type observableLogger struct {
 }
 
 func (l *observableLogger) Log(ctx context.Context, level Level, args []any) {
-	level = OverrideLevelFromContext(level, ctx)
-	if level > l.level {
-		return
-	}
-	nowTime := time.Now()
-	if l.needObservable {
-		message, messageSimple := l.formatter.FormatWithSimple(ctx, level, l.tag, F.ToString(args...), nowTime)
-		if level == LevelPanic {
-			panic(message)
-		}
-		l.writer.Write([]byte(message))
-		if level == LevelFatal {
-			os.Exit(1)
-		}
-		l.subscriber.Emit(Entry{level, messageSimple})
-	} else {
-		message := l.formatter.Format(ctx, level, l.tag, F.ToString(args...), nowTime)
-		if level == LevelPanic {
-			panic(message)
-		}
-		l.writer.Write([]byte(message))
-		if level == LevelFatal {
-			os.Exit(1)
-		}
-	}
-	if l.platformWriter != nil {
-		l.platformWriter.WriteMessage(level, l.platformFormatter.Format(ctx, level, l.tag, F.ToString(args...), nowTime))
-	}
+	
 }
 
 func (l *observableLogger) Trace(args ...any) {

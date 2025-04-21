@@ -6,7 +6,7 @@ import (
 	"net"
 )
 
-const go121Available = false
+const haishiyonzhege21 = false
 
-func setMultiPathTCP(dialer *net.Dialer) {
+func shezhiHenduoDizhipeise(dialer *net.Dialer) {
 }

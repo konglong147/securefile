@@ -3,7 +3,7 @@ package geoip
 import (
 	"net/netip"
 
-	E "github.com/sagernet/sing/common/exceptions"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 
 	"github.com/oschwald/maxminddb-golang"
 )

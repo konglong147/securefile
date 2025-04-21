@@ -23,15 +23,15 @@ type InboundTLSOptionsContainer struct {
 
 type InboundTLSOptionsWrapper interface {
 	TakeInboundTLSOptions() *InboundTLSOptions
-	ReplaceInboundTLSOptions(options *InboundTLSOptions)
+	ReplaceInboundTLSOptions(yousuocanshu *InboundTLSOptions)
 }
 
 func (o *InboundTLSOptionsContainer) TakeInboundTLSOptions() *InboundTLSOptions {
 	return o.TLS
 }
 
-func (o *InboundTLSOptionsContainer) ReplaceInboundTLSOptions(options *InboundTLSOptions) {
-	o.TLS = options
+func (o *InboundTLSOptionsContainer) ReplaceInboundTLSOptions(yousuocanshu *InboundTLSOptions) {
+	o.TLS = yousuocanshu
 }
 
 type OutboundTLSOptions struct {
@@ -56,15 +56,15 @@ type OutboundTLSOptionsContainer struct {
 
 type OutboundTLSOptionsWrapper interface {
 	TakeOutboundTLSOptions() *OutboundTLSOptions
-	ReplaceOutboundTLSOptions(options *OutboundTLSOptions)
+	ReplaceOutboundTLSOptions(yousuocanshu *OutboundTLSOptions)
 }
 
 func (o *OutboundTLSOptionsContainer) TakeOutboundTLSOptions() *OutboundTLSOptions {
 	return o.TLS
 }
 
-func (o *OutboundTLSOptionsContainer) ReplaceOutboundTLSOptions(options *OutboundTLSOptions) {
-	o.TLS = options
+func (o *OutboundTLSOptionsContainer) ReplaceOutboundTLSOptions(yousuocanshu *OutboundTLSOptions) {
+	o.TLS = yousuocanshu
 }
 
 type InboundRealityOptions struct {

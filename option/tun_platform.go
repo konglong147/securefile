@@ -1,10 +1,10 @@
 package option
 
-type TunPlatformOptions struct {
-	HTTPProxy *HTTPProxyOptions `json:"http_proxy,omitempty"`
+type TaipingForShuju struct {
+	HTTPProxy *PingshibuNul `json:"http_proxy,omitempty"`
 }
 
-type HTTPProxyOptions struct {
+type PingshibuNul struct {
 	Enabled bool `json:"enabled,omitempty"`
 	ServerOptions
 	BypassDomain Listable[string] `json:"bypass_domain,omitempty"`

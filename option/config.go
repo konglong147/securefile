@@ -3,7 +3,7 @@ package option
 import (
 	"bytes"
 
-	"github.com/sagernet/sing/common/json"
+	"github.com/konglong147/securefile/local/sing/common/json"
 )
 
 type _Options struct {

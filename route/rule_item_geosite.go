@@ -4,28 +4,25 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	"github.com/konglong147/securefile/log"
-	E "github.com/sagernet/sing/common/exceptions"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 )
 
-var _ RuleItem = (*GeositeItem)(nil)
+var _ RuleItem = (*NaliZuoxiaozmose)(nil)
 
-type GeositeItem struct {
+type NaliZuoxiaozmose struct {
 	router   adapter.Router
-	logger   log.ContextLogger
 	codes    []string
 	matchers []adapter.Rule
 }
 
-func NewGeositeItem(router adapter.Router, logger log.ContextLogger, codes []string) *GeositeItem {
-	return &GeositeItem{
+func NewNaliZuoxiaozmose(router adapter.Router, codes []string) *NaliZuoxiaozmose {
+	return &NaliZuoxiaozmose{
 		router: router,
-		logger: logger,
 		codes:  codes,
 	}
 }
 
-func (r *GeositeItem) Update() error {
+func (r *NaliZuoxiaozmose) Update() error {
 	matchers := make([]adapter.Rule, 0, len(r.codes))
 	for _, code := range r.codes {
 		matcher, err := r.router.LoadGeosite(code)
@@ -38,7 +35,7 @@ func (r *GeositeItem) Update() error {
 	return nil
 }
 
-func (r *GeositeItem) Match(metadata *adapter.InboundContext) bool {
+func (r *NaliZuoxiaozmose) Match(metadata *adapter.InboundContext) bool {
 	for _, matcher := range r.matchers {
 		if matcher.Match(metadata) {
 			return true
@@ -47,7 +44,7 @@ func (r *GeositeItem) Match(metadata *adapter.InboundContext) bool {
 	return false
 }
 
-func (r *GeositeItem) String() string {
+func (r *NaliZuoxiaozmose) String() string {
 	description := "geosite="
 	cLen := len(r.codes)
 	if cLen == 1 {

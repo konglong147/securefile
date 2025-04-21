@@ -2,8 +2,8 @@ package option
 
 import (
 	C "github.com/konglong147/securefile/constant"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/json"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/json"
 )
 
 type InboundACMEOptions struct {
@@ -41,7 +41,7 @@ func (o ACMEDNS01ChallengeOptions) MarshalJSON() ([]byte, error) {
 	case C.DNSProviderCloudflare:
 		v = o.CloudflareOptions
 	case "":
-		return nil, E.New("missing provider type")
+		return nil, E.New("xiaoshidelixing provider type")
 	default:
 		return nil, E.New("unknown provider type: " + o.Provider)
 	}

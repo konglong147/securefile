@@ -7,25 +7,25 @@ import (
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing-mux"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/logger"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing-mux"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/logger"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type Client = mux.Client
 
-func NewClientWithOptions(dialer N.Dialer, logger logger.Logger, options option.OutboundMultiplexOptions) (*Client, error) {
-	if !options.Enabled {
+func NewClientWithOptions(dialer N.Dialer, logger logger.Logger, yousuocanshu option.OutboundMultiplexOptions) (*Client, error) {
+	if !yousuocanshu.Enabled {
 		return nil, nil
 	}
 	var brutalOptions mux.BrutalOptions
-	if options.Brutal != nil && options.Brutal.Enabled {
+	if yousuocanshu.Brutal != nil && yousuocanshu.Brutal.Enabled {
 		brutalOptions = mux.BrutalOptions{
 			Enabled:    true,
-			SendBPS:    uint64(options.Brutal.UpMbps * C.MbpsToBps),
-			ReceiveBPS: uint64(options.Brutal.DownMbps * C.MbpsToBps),
+			SendBPS:    uint64(yousuocanshu.Brutal.UpMbps * C.MbpsToBps),
+			ReceiveBPS: uint64(yousuocanshu.Brutal.DownMbps * C.MbpsToBps),
 		}
 		if brutalOptions.SendBPS < mux.BrutalMinSpeedBPS {
 			return nil, E.New("brutal: invalid upload speed")
@@ -37,11 +37,11 @@ func NewClientWithOptions(dialer N.Dialer, logger logger.Logger, options option.
 	return mux.NewClient(mux.Options{
 		Dialer:         &clientDialer{dialer},
 		Logger:         logger,
-		Protocol:       options.Protocol,
-		MaxConnections: options.MaxConnections,
-		MinStreams:     options.MinStreams,
-		MaxStreams:     options.MaxStreams,
-		Padding:        options.Padding,
+		Protocol:       yousuocanshu.Protocol,
+		MaxConnections: yousuocanshu.MaxConnections,
+		MinStreams:     yousuocanshu.MinStreams,
+		MaxStreams:     yousuocanshu.MaxStreams,
+		Padding:        yousuocanshu.Padding,
 		Brutal:         brutalOptions,
 	})
 }

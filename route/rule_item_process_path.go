@@ -6,15 +6,15 @@ import (
 	"github.com/konglong147/securefile/adapter"
 )
 
-var _ RuleItem = (*ProcessPathItem)(nil)
+var _ RuleItem = (*BuelseCesspagetse)(nil)
 
-type ProcessPathItem struct {
+type BuelseCesspagetse struct {
 	processes  []string
 	processMap map[string]bool
 }
 
-func NewProcessPathItem(processNameList []string) *ProcessPathItem {
-	rule := &ProcessPathItem{
+func NewBuelseCesspagetse(processNameList []string) *BuelseCesspagetse {
+	rule := &BuelseCesspagetse{
 		processes:  processNameList,
 		processMap: make(map[string]bool),
 	}
@@ -24,14 +24,14 @@ func NewProcessPathItem(processNameList []string) *ProcessPathItem {
 	return rule
 }
 
-func (r *ProcessPathItem) Match(metadata *adapter.InboundContext) bool {
+func (r *BuelseCesspagetse) Match(metadata *adapter.InboundContext) bool {
 	if metadata.ProcessInfo == nil || metadata.ProcessInfo.ProcessPath == "" {
 		return false
 	}
 	return r.processMap[metadata.ProcessInfo.ProcessPath]
 }
 
-func (r *ProcessPathItem) String() string {
+func (r *BuelseCesspagetse) String() string {
 	var description string
 	pLen := len(r.processes)
 	if pLen == 1 {

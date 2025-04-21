@@ -4,23 +4,23 @@ import (
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/option"
-	E "github.com/sagernet/sing/common/exceptions"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 )
 
-func NewHeadlessRule(router adapter.Router, options option.HeadlessRule) (adapter.HeadlessRule, error) {
-	switch options.Type {
+func NewHeadlessRule(router adapter.Router, yousuocanshu option.HeadlessRule) (adapter.HeadlessRule, error) {
+	switch yousuocanshu.Type {
 	case "", C.RuleTypeDefault:
-		if !options.DefaultOptions.IsValid() {
-			return nil, E.New("missing conditions")
+		if !yousuocanshu.DefaultOptions.IsValid() {
+			return nil, E.New("xiaoshidelixing conditions")
 		}
-		return NewDefaultHeadlessRule(router, options.DefaultOptions)
+		return NewDefaultHeadlessRule(router, yousuocanshu.DefaultOptions)
 	case C.RuleTypeLogical:
-		if !options.LogicalOptions.IsValid() {
-			return nil, E.New("missing conditions")
+		if !yousuocanshu.LogicalOptions.IsValid() {
+			return nil, E.New("xiaoshidelixing conditions")
 		}
-		return NewLogicalHeadlessRule(router, options.LogicalOptions)
+		return NewLogicalHeadlessRule(router, yousuocanshu.LogicalOptions)
 	default:
-		return nil, E.New("unknown rule type: ", options.Type)
+		return nil, E.New("unknown rule type: ", yousuocanshu.Type)
 	}
 }
 
@@ -30,132 +30,132 @@ type DefaultHeadlessRule struct {
 	abstractDefaultRule
 }
 
-func NewDefaultHeadlessRule(router adapter.Router, options option.DefaultHeadlessRule) (*DefaultHeadlessRule, error) {
+func NewDefaultHeadlessRule(router adapter.Router, yousuocanshu option.DefaultHeadlessRule) (*DefaultHeadlessRule, error) {
 	rule := &DefaultHeadlessRule{
 		abstractDefaultRule{
-			invert: options.Invert,
+			invert: yousuocanshu.Invert,
 		},
 	}
-	if len(options.Network) > 0 {
-		item := NewNetworkItem(options.Network)
+	if len(yousuocanshu.Network) > 0 {
+		item := NewGongzuoMeisats(yousuocanshu.Network)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.Domain) > 0 || len(options.DomainSuffix) > 0 {
-		item := NewDomainItem(options.Domain, options.DomainSuffix)
+	if len(yousuocanshu.Domain) > 0 || len(yousuocanshu.DomainSuffix) > 0 {
+		item := NewDomainItem(yousuocanshu.Domain, yousuocanshu.DomainSuffix)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
-	} else if options.DomainMatcher != nil {
-		item := NewRawDomainItem(options.DomainMatcher)
-		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
-		rule.allItems = append(rule.allItems, item)
-	}
-	if len(options.DomainKeyword) > 0 {
-		item := NewDomainKeywordItem(options.DomainKeyword)
+	} else if yousuocanshu.DomainMatcher != nil {
+		item := NewRawDomainItem(yousuocanshu.DomainMatcher)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.DomainRegex) > 0 {
-		item, err := NewDomainRegexItem(options.DomainRegex)
+	if len(yousuocanshu.DomainKeyword) > 0 {
+		item := NewDomainKeywordItem(yousuocanshu.DomainKeyword)
+		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
+		rule.allItems = append(rule.allItems, item)
+	}
+	if len(yousuocanshu.DomainRegex) > 0 {
+		item, err := NewDomainRegexItem(yousuocanshu.DomainRegex)
 		if err != nil {
 			return nil, E.Cause(err, "domain_regex")
 		}
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.SourceIPCIDR) > 0 {
-		item, err := NewIPCIDRItem(true, options.SourceIPCIDR)
+	if len(yousuocanshu.SourceIPCIDR) > 0 {
+		item, err := NewIPCIDRItem(true, yousuocanshu.SourceIPCIDR)
 		if err != nil {
 			return nil, E.Cause(err, "source_ip_cidr")
 		}
 		rule.sourceAddressItems = append(rule.sourceAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
-	} else if options.SourceIPSet != nil {
-		item := NewRawIPCIDRItem(true, options.SourceIPSet)
+	} else if yousuocanshu.SourceIPSet != nil {
+		item := NewRawIPCIDRItem(true, yousuocanshu.SourceIPSet)
 		rule.sourceAddressItems = append(rule.sourceAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.IPCIDR) > 0 {
-		item, err := NewIPCIDRItem(false, options.IPCIDR)
+	if len(yousuocanshu.IPCIDR) > 0 {
+		item, err := NewIPCIDRItem(false, yousuocanshu.IPCIDR)
 		if err != nil {
 			return nil, E.Cause(err, "ipcidr")
 		}
 		rule.destinationIPCIDRItems = append(rule.destinationIPCIDRItems, item)
 		rule.allItems = append(rule.allItems, item)
-	} else if options.IPSet != nil {
-		item := NewRawIPCIDRItem(false, options.IPSet)
+	} else if yousuocanshu.IPSet != nil {
+		item := NewRawIPCIDRItem(false, yousuocanshu.IPSet)
 		rule.destinationIPCIDRItems = append(rule.destinationIPCIDRItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.SourcePort) > 0 {
-		item := NewPortItem(true, options.SourcePort)
-		rule.sourcePortItems = append(rule.sourcePortItems, item)
+	if len(yousuocanshu.SourcePort) > 0 {
+		item := NewJiekouMetise(true, yousuocanshu.SourcePort)
+		rule.sourceJiekouMetises = append(rule.sourceJiekouMetises, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.SourcePortRange) > 0 {
-		item, err := NewPortRangeItem(true, options.SourcePortRange)
+	if len(yousuocanshu.SourcePortRange) > 0 {
+		item, err := NewPortRangeItem(true, yousuocanshu.SourcePortRange)
 		if err != nil {
 			return nil, E.Cause(err, "source_port_range")
 		}
-		rule.sourcePortItems = append(rule.sourcePortItems, item)
+		rule.sourceJiekouMetises = append(rule.sourceJiekouMetises, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.Port) > 0 {
-		item := NewPortItem(false, options.Port)
-		rule.destinationPortItems = append(rule.destinationPortItems, item)
+	if len(yousuocanshu.Port) > 0 {
+		item := NewJiekouMetise(false, yousuocanshu.Port)
+		rule.destinationJiekouMetises = append(rule.destinationJiekouMetises, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.PortRange) > 0 {
-		item, err := NewPortRangeItem(false, options.PortRange)
+	if len(yousuocanshu.PortRange) > 0 {
+		item, err := NewPortRangeItem(false, yousuocanshu.PortRange)
 		if err != nil {
 			return nil, E.Cause(err, "port_range")
 		}
-		rule.destinationPortItems = append(rule.destinationPortItems, item)
+		rule.destinationJiekouMetises = append(rule.destinationJiekouMetises, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.ProcessName) > 0 {
-		item := NewProcessItem(options.ProcessName)
+	if len(yousuocanshu.ProcessName) > 0 {
+		item := NewTongdapnewsaeta(yousuocanshu.ProcessName)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.ProcessPath) > 0 {
-		item := NewProcessPathItem(options.ProcessPath)
+	if len(yousuocanshu.ProcessPath) > 0 {
+		item := NewBuelseCesspagetse(yousuocanshu.ProcessPath)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.ProcessPathRegex) > 0 {
-		item, err := NewProcessPathRegexItem(options.ProcessPathRegex)
+	if len(yousuocanshu.ProcessPathRegex) > 0 {
+		item, err := NewdizhibuxngGeisheizhi(yousuocanshu.ProcessPathRegex)
 		if err != nil {
 			return nil, E.Cause(err, "process_path_regex")
 		}
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.PackageName) > 0 {
-		item := NewPackageNameItem(options.PackageName)
+	if len(yousuocanshu.PackageName) > 0 {
+		item := NewZhizhangMingmites(yousuocanshu.PackageName)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.WIFISSID) > 0 {
+	if len(yousuocanshu.WIFISSID) > 0 {
 		if router != nil {
-			item := NewWIFISSIDItem(router, options.WIFISSID)
+			item := XindeluxianWanl(router, yousuocanshu.WIFISSID)
 			rule.items = append(rule.items, item)
 			rule.allItems = append(rule.allItems, item)
 		}
 	}
-	if len(options.WIFIBSSID) > 0 {
+	if len(yousuocanshu.WIFIBSSID) > 0 {
 		if router != nil {
-			item := NewWIFIBSSIDItem(router, options.WIFIBSSID)
+			item := NewXinWangGoBaqpe(router, yousuocanshu.WIFIBSSID)
 			rule.items = append(rule.items, item)
 			rule.allItems = append(rule.allItems, item)
 		}
 	}
-	if len(options.AdGuardDomain) > 0 {
-		item := NewAdGuardDomainItem(options.AdGuardDomain)
+	if len(yousuocanshu.AdGuardDomain) > 0 {
+		item := NewAdGuardDomainItem(yousuocanshu.AdGuardDomain)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
-	} else if options.AdGuardDomainMatcher != nil {
-		item := NewRawAdGuardDomainItem(options.AdGuardDomainMatcher)
+	} else if yousuocanshu.AdGuardDomainMatcher != nil {
+		item := NewRawAdGuardDomainItem(yousuocanshu.AdGuardDomainMatcher)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
@@ -168,22 +168,22 @@ type LogicalHeadlessRule struct {
 	abstractLogicalRule
 }
 
-func NewLogicalHeadlessRule(router adapter.Router, options option.LogicalHeadlessRule) (*LogicalHeadlessRule, error) {
+func NewLogicalHeadlessRule(router adapter.Router, yousuocanshu option.LogicalHeadlessRule) (*LogicalHeadlessRule, error) {
 	r := &LogicalHeadlessRule{
 		abstractLogicalRule{
-			rules:  make([]adapter.HeadlessRule, len(options.Rules)),
-			invert: options.Invert,
+			rules:  make([]adapter.HeadlessRule, len(yousuocanshu.Rules)),
+			invert: yousuocanshu.Invert,
 		},
 	}
-	switch options.Mode {
+	switch yousuocanshu.Mode {
 	case C.LogicalTypeAnd:
 		r.mode = C.LogicalTypeAnd
 	case C.LogicalTypeOr:
 		r.mode = C.LogicalTypeOr
 	default:
-		return nil, E.New("unknown logical mode: ", options.Mode)
+		return nil, E.New("unknown logical mode: ", yousuocanshu.Mode)
 	}
-	for i, subRule := range options.Rules {
+	for i, subRule := range yousuocanshu.Rules {
 		rule, err := NewHeadlessRule(router, subRule)
 		if err != nil {
 			return nil, E.Cause(err, "sub rule[", i, "]")

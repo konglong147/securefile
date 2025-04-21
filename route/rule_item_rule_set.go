@@ -4,14 +4,14 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	"github.com/sagernet/sing/common"
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
+	"github.com/konglong147/securefile/local/sing/common"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-var _ RuleItem = (*RuleSetItem)(nil)
+var _ RuleItem = (*GuizeSheizhimest)(nil)
 
-type RuleSetItem struct {
+type GuizeSheizhimest struct {
 	router            adapter.Router
 	tagList           []string
 	setList           []adapter.RuleSet
@@ -19,8 +19,8 @@ type RuleSetItem struct {
 	ipCidrAcceptEmpty bool
 }
 
-func NewRuleSetItem(router adapter.Router, tagList []string, ipCIDRMatchSource bool, ipCidrAcceptEmpty bool) *RuleSetItem {
-	return &RuleSetItem{
+func NewGuizeSheizhimest(router adapter.Router, tagList []string, ipCIDRMatchSource bool, ipCidrAcceptEmpty bool) *GuizeSheizhimest {
+	return &GuizeSheizhimest{
 		router:            router,
 		tagList:           tagList,
 		ipCidrMatchSource: ipCIDRMatchSource,
@@ -28,7 +28,7 @@ func NewRuleSetItem(router adapter.Router, tagList []string, ipCIDRMatchSource b
 	}
 }
 
-func (r *RuleSetItem) Start() error {
+func (r *GuizeSheizhimest) Start() error {
 	for _, tag := range r.tagList {
 		ruleSet, loaded := r.router.RuleSet(tag)
 		if !loaded {
@@ -40,7 +40,7 @@ func (r *RuleSetItem) Start() error {
 	return nil
 }
 
-func (r *RuleSetItem) Match(metadata *adapter.InboundContext) bool {
+func (r *GuizeSheizhimest) Match(metadata *adapter.InboundContext) bool {
 	metadata.IPCIDRMatchSource = r.ipCidrMatchSource
 	metadata.IPCIDRAcceptEmpty = r.ipCidrAcceptEmpty
 	for _, ruleSet := range r.setList {
@@ -51,7 +51,7 @@ func (r *RuleSetItem) Match(metadata *adapter.InboundContext) bool {
 	return false
 }
 
-func (r *RuleSetItem) ContainsDestinationIPCIDRRule() bool {
+func (r *GuizeSheizhimest) ContainsDestinationIPCIDRRule() bool {
 	if r.ipCidrMatchSource {
 		return false
 	}
@@ -60,7 +60,7 @@ func (r *RuleSetItem) ContainsDestinationIPCIDRRule() bool {
 	})
 }
 
-func (r *RuleSetItem) String() string {
+func (r *GuizeSheizhimest) String() string {
 	if len(r.tagList) == 1 {
 		return F.ToString("rule_set=", r.tagList[0])
 	} else {

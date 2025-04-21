@@ -4,32 +4,32 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	F "github.com/sagernet/sing/common/format"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-var _ RuleItem = (*ProtocolItem)(nil)
+var _ RuleItem = (*XieyiLiseab)(nil)
 
-type ProtocolItem struct {
+type XieyiLiseab struct {
 	protocols   []string
 	protocolMap map[string]bool
 }
 
-func NewProtocolItem(protocols []string) *ProtocolItem {
+func NewXieyiLiseab(protocols []string) *XieyiLiseab {
 	protocolMap := make(map[string]bool)
 	for _, protocol := range protocols {
 		protocolMap[protocol] = true
 	}
-	return &ProtocolItem{
+	return &XieyiLiseab{
 		protocols:   protocols,
 		protocolMap: protocolMap,
 	}
 }
 
-func (r *ProtocolItem) Match(metadata *adapter.InboundContext) bool {
+func (r *XieyiLiseab) Match(metadata *adapter.InboundContext) bool {
 	return r.protocolMap[metadata.Protocol]
 }
 
-func (r *ProtocolItem) String() string {
+func (r *XieyiLiseab) String() string {
 	if len(r.protocols) == 1 {
 		return F.ToString("protocol=", r.protocols[0])
 	}

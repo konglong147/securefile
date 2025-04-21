@@ -1,8 +1,8 @@
 package option
 
 import (
-	"github.com/sagernet/sing/common/json"
-	"github.com/sagernet/sing/common/uot"
+	"github.com/konglong147/securefile/local/sing/common/json"
+	"github.com/konglong147/securefile/local/sing/common/uot"
 )
 
 type _UDPOverTCPOptions struct {

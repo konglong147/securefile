@@ -7,8 +7,8 @@ import (
 
 	"github.com/konglong147/securefile/common/process"
 	"github.com/konglong147/securefile/option"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type Inbound interface {

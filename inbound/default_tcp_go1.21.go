@@ -4,8 +4,8 @@ package inbound
 
 import "net"
 
-const go121Available = true
+const haishiyonzhege21 = true
 
-func setMultiPathTCP(listenConfig *net.ListenConfig) {
+func shezhiHenduoDizhipeise(listenConfig *net.ListenConfig) {
 	listenConfig.SetMultipathTCP(true)
 }

@@ -1,6 +1,6 @@
 package option
 
-import "github.com/sagernet/sing/common/auth"
+import "github.com/konglong147/securefile/local/sing/common/auth"
 
 type SocksInboundOptions struct {
 	ListenOptions

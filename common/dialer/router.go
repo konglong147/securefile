@@ -5,8 +5,8 @@ import (
 	"net"
 
 	"github.com/konglong147/securefile/adapter"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type RouterDialer struct {

@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/netip"
 
-	"github.com/sagernet/sing/common"
+	"github.com/konglong147/securefile/local/sing/common"
 )
 
 type FakeIPMetadata struct {

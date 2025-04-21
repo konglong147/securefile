@@ -5,7 +5,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/sagernet/sing/common/x/list"
+	"github.com/konglong147/securefile/local/sing/common/x/list"
 )
 
 type Group struct {

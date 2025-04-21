@@ -14,8 +14,8 @@ import (
 	"github.com/konglong147/securefile/common/ja3"
 	"github.com/konglong147/securefile/common/sniff/internal/qtls"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common/buf"
-	E "github.com/sagernet/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/buf"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 
 	"golang.org/x/crypto/hkdf"
 )

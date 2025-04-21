@@ -2,24 +2,17 @@ package option
 
 import (
 	C "github.com/konglong147/securefile/constant"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/json"
-	M "github.com/sagernet/sing/common/metadata"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/json"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
 )
 
 type _Outbound struct {
 	Type                string                      `json:"type"`
 	Tag                 string                      `json:"tag,omitempty"`
 	DirectOptions       DirectOutboundOptions       `json:"-"`
-	SocksOptions        SocksOutboundOptions        `json:"-"`
-	HTTPOptions         HTTPOutboundOptions         `json:"-"`
 	VMessOptions        VMessOutboundOptions        `json:"-"`
-	TorOptions          TorOutboundOptions          `json:"-"`
-	SSHOptions          SSHOutboundOptions          `json:"-"`
 	VLESSOptions        VLESSOutboundOptions        `json:"-"`
-	TUICOptions         TUICOutboundOptions         `json:"-"`
-	SelectorOptions     SelectorOutboundOptions     `json:"-"`
-	URLTestOptions      URLTestOutboundOptions      `json:"-"`
 }
 
 type Outbound _Outbound
@@ -31,26 +24,12 @@ func (h *Outbound) RawOptions() (any, error) {
 		rawOptionsPtr = &h.DirectOptions
 	case C.TypeBlock, C.TypeDNS:
 		rawOptionsPtr = nil
-	case C.TypeSOCKS:
-		rawOptionsPtr = &h.SocksOptions
-	case C.TypeHTTP:
-		rawOptionsPtr = &h.HTTPOptions
 	case C.TypeVMess:
 		rawOptionsPtr = &h.VMessOptions
-	case C.TypeTor:
-		rawOptionsPtr = &h.TorOptions
-	case C.TypeSSH:
-		rawOptionsPtr = &h.SSHOptions
 	case C.TypeVLESS:
 		rawOptionsPtr = &h.VLESSOptions
-	case C.TypeTUIC:
-		rawOptionsPtr = &h.TUICOptions
-	case C.TypeSelector:
-		rawOptionsPtr = &h.SelectorOptions
-	case C.TypeURLTest:
-		rawOptionsPtr = &h.URLTestOptions
 	case "":
-		return nil, E.New("missing outbound type")
+		return nil, E.New("xiaoshidelixing outbound type")
 	default:
 		return nil, E.New("unknown outbound type: ", h.Type)
 	}
@@ -83,7 +62,7 @@ func (h *Outbound) UnmarshalJSON(bytes []byte) error {
 
 type DialerOptionsWrapper interface {
 	TakeDialerOptions() DialerOptions
-	ReplaceDialerOptions(options DialerOptions)
+	ReplaceDialerOptions(yousuocanshu DialerOptions)
 }
 
 type DialerOptions struct {
@@ -107,13 +86,13 @@ func (o *DialerOptions) TakeDialerOptions() DialerOptions {
 	return *o
 }
 
-func (o *DialerOptions) ReplaceDialerOptions(options DialerOptions) {
-	*o = options
+func (o *DialerOptions) ReplaceDialerOptions(yousuocanshu DialerOptions) {
+	*o = yousuocanshu
 }
 
 type ServerOptionsWrapper interface {
 	TakeServerOptions() ServerOptions
-	ReplaceServerOptions(options ServerOptions)
+	ReplaceServerOptions(yousuocanshu ServerOptions)
 }
 
 type ServerOptions struct {
@@ -129,6 +108,6 @@ func (o *ServerOptions) TakeServerOptions() ServerOptions {
 	return *o
 }
 
-func (o *ServerOptions) ReplaceServerOptions(options ServerOptions) {
-	*o = options
+func (o *ServerOptions) ReplaceServerOptions(yousuocanshu ServerOptions) {
+	*o = yousuocanshu
 }

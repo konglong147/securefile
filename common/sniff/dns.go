@@ -9,10 +9,10 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/buf"
-	M "github.com/sagernet/sing/common/metadata"
-	"github.com/sagernet/sing/common/task"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/buf"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	"github.com/konglong147/securefile/local/sing/common/task"
 
 	mDNS "github.com/miekg/dns"
 )

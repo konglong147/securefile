@@ -5,33 +5,33 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing-dns"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing-dns"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
-func New(router adapter.Router, options option.DialerOptions) (N.Dialer, error) {
+func New(router adapter.Router, yousuocanshu option.DialerOptions) (N.Dialer, error) {
 	if router == nil {
-		return NewDefault(nil, options)
+		return NewDefault(nil, yousuocanshu)
 	}
 	var (
 		dialer N.Dialer
 		err    error
 	)
-	if options.Detour == "" {
-		dialer, err = NewDefault(router, options)
+	if yousuocanshu.Detour == "" {
+		dialer, err = NewDefault(router, yousuocanshu)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		dialer = NewDetour(router, options.Detour)
+		dialer = NewDetour(router, yousuocanshu.Detour)
 	}
-	if options.Detour == "" {
+	if yousuocanshu.Detour == "" {
 		dialer = NewResolveDialer(
 			router,
 			dialer,
-			options.Detour == "" && !options.TCPFastOpen,
-			dns.DomainStrategy(options.DomainStrategy),
-			time.Duration(options.FallbackDelay))
+			yousuocanshu.Detour == "" && !yousuocanshu.TCPFastOpen,
+			dns.DomainStrategy(yousuocanshu.DomainStrategy),
+			time.Duration(yousuocanshu.FallbackDelay))
 	}
 	return dialer, nil
 }

@@ -7,7 +7,7 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common/bufio"
+	"github.com/konglong147/securefile/local/sing/common/bufio"
 )
 
 func TLSClientHello(ctx context.Context, metadata *adapter.InboundContext, reader io.Reader) error {

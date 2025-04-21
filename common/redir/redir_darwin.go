@@ -6,7 +6,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	M "github.com/sagernet/sing/common/metadata"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
 )
 
 const (

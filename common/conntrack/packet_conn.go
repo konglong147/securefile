@@ -4,8 +4,8 @@ import (
 	"io"
 	"net"
 
-	"github.com/sagernet/sing/common/bufio"
-	"github.com/sagernet/sing/common/x/list"
+	"github.com/konglong147/securefile/local/sing/common/bufio"
+	"github.com/konglong147/securefile/local/sing/common/x/list"
 )
 
 type PacketConn struct {

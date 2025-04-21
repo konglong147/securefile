@@ -4,7 +4,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/sagernet/sing/common/logger"
+	"github.com/konglong147/securefile/local/sing/common/logger"
 )
 
 type stderrManager struct {

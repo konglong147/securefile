@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	"github.com/sagernet/sing/common/domain"
+	"github.com/konglong147/securefile/local/sing/common/domain"
 )
 
 var _ RuleItem = (*DomainItem)(nil)

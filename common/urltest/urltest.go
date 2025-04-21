@@ -9,9 +9,9 @@ import (
 	"time"
 
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type History struct {

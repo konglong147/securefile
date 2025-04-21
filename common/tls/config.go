@@ -3,8 +3,8 @@ package tls
 import (
 	"crypto/tls"
 
-	E "github.com/sagernet/sing/common/exceptions"
-	aTLS "github.com/sagernet/sing/common/tls"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	aTLS "github.com/konglong147/securefile/local/sing/common/tls"
 )
 
 type (

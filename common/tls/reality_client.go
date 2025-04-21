@@ -28,9 +28,9 @@ import (
 	"unsafe"
 
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing/common/debug"
-	E "github.com/sagernet/sing/common/exceptions"
-	aTLS "github.com/sagernet/sing/common/tls"
+	"github.com/konglong147/securefile/local/sing/common/debug"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	aTLS "github.com/konglong147/securefile/local/sing/common/tls"
 	utls "github.com/sagernet/utls"
 
 	"golang.org/x/crypto/hkdf"
@@ -45,17 +45,17 @@ type RealityClientConfig struct {
 	shortID   [8]byte
 }
 
-func NewRealityClient(ctx context.Context, serverAddress string, options option.OutboundTLSOptions) (*RealityClientConfig, error) {
-	if options.UTLS == nil || !options.UTLS.Enabled {
+func NewRealityClient(ctx context.Context, serverAddress string, yousuocanshu option.OutboundTLSOptions) (*RealityClientConfig, error) {
+	if yousuocanshu.UTLS == nil || !yousuocanshu.UTLS.Enabled {
 		return nil, E.New("uTLS is required by reality client")
 	}
 
-	uClient, err := NewUTLSClient(ctx, serverAddress, options)
+	uClient, err := NewUTLSClient(ctx, serverAddress, yousuocanshu)
 	if err != nil {
 		return nil, err
 	}
 
-	publicKey, err := base64.RawURLEncoding.DecodeString(options.Reality.PublicKey)
+	publicKey, err := base64.RawURLEncoding.DecodeString(yousuocanshu.Reality.PublicKey)
 	if err != nil {
 		return nil, E.Cause(err, "decode public_key")
 	}
@@ -63,7 +63,7 @@ func NewRealityClient(ctx context.Context, serverAddress string, options option.
 		return nil, E.New("invalid public_key")
 	}
 	var shortID [8]byte
-	decodedLen, err := hex.Decode(shortID[:], []byte(options.Reality.ShortID))
+	decodedLen, err := hex.Decode(shortID[:], []byte(yousuocanshu.Reality.ShortID))
 	if err != nil {
 		return nil, E.Cause(err, "decode short_id")
 	}

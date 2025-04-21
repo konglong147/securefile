@@ -17,5 +17,4 @@ const (
 	StartTimeout               = 10 * time.Second
 	StopTimeout                = 5 * time.Second
 	FatalStopTimeout           = 10 * time.Second
-	FakeIPMetadataSaveInterval = 10 * time.Second
 )

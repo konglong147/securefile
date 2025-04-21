@@ -7,11 +7,11 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	"github.com/sagernet/sing-tun"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	"github.com/sagernet/sing/common/shell"
-	"github.com/sagernet/sing/common/x/list"
+	"github.com/konglong147/securefile/local/sing-tun"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	"github.com/konglong147/securefile/local/sing/common/shell"
+	"github.com/konglong147/securefile/local/sing/common/x/list"
 )
 
 type DarwinSystemProxy struct {
@@ -26,7 +26,7 @@ type DarwinSystemProxy struct {
 func NewSystemProxy(ctx context.Context, serverAddr M.Socksaddr, supportSOCKS bool) (*DarwinSystemProxy, error) {
 	interfaceMonitor := adapter.RouterFromContext(ctx).InterfaceMonitor()
 	if interfaceMonitor == nil {
-		return nil, E.New("missing interface monitor")
+		return nil, E.New("xiaoshidelixing interface monitor")
 	}
 	proxy := &DarwinSystemProxy{
 		monitor:      interfaceMonitor,

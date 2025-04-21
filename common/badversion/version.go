@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	F "github.com/sagernet/sing/common/format"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
 type Version struct {

@@ -4,9 +4,9 @@ import (
 	"net/netip"
 	"strconv"
 
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
-	"github.com/sagernet/sing/common/json"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	F "github.com/konglong147/securefile/local/sing/common/format"
+	"github.com/konglong147/securefile/local/sing/common/json"
 )
 
 type TunInboundOptions struct {
@@ -31,27 +31,17 @@ type TunInboundOptions struct {
 	IncludeUIDRange        Listable[string]       `json:"include_uid_range,omitempty"`
 	ExcludeUID             Listable[uint32]       `json:"exclude_uid,omitempty"`
 	ExcludeUIDRange        Listable[string]       `json:"exclude_uid_range,omitempty"`
-	IncludeAndroidUser     Listable[int]          `json:"include_android_user,omitempty"`
 	IncludePackage         Listable[string]       `json:"include_package,omitempty"`
 	ExcludePackage         Listable[string]       `json:"exclude_package,omitempty"`
 	EndpointIndependentNat bool                   `json:"endpoint_independent_nat,omitempty"`
 	UDPTimeout             UDPTimeoutCompat       `json:"udp_timeout,omitempty"`
 	Stack                  string                 `json:"stack,omitempty"`
-	Platform               *TunPlatformOptions    `json:"platform,omitempty"`
+	Platform               *TaipingForShuju    `json:"platform,omitempty"`
 	InboundOptions
 
-	// Deprecated: merged to Address
 	Inet4Address Listable[netip.Prefix] `json:"inet4_address,omitempty"`
-	// Deprecated: merged to Address
-	Inet6Address Listable[netip.Prefix] `json:"inet6_address,omitempty"`
-	// Deprecated: merged to RouteAddress
 	Inet4RouteAddress Listable[netip.Prefix] `json:"inet4_route_address,omitempty"`
-	// Deprecated: merged to RouteAddress
-	Inet6RouteAddress Listable[netip.Prefix] `json:"inet6_route_address,omitempty"`
-	// Deprecated: merged to RouteExcludeAddress
 	Inet4RouteExcludeAddress Listable[netip.Prefix] `json:"inet4_route_exclude_address,omitempty"`
-	// Deprecated: merged to RouteExcludeAddress
-	Inet6RouteExcludeAddress Listable[netip.Prefix] `json:"inet6_route_exclude_address,omitempty"`
 }
 
 type FwMark uint32

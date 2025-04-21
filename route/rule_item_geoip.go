@@ -5,35 +5,32 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	"github.com/konglong147/securefile/log"
-	N "github.com/sagernet/sing/common/network"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
-var _ RuleItem = (*GeoIPItem)(nil)
+var _ RuleItem = (*MeisozeDizhiTMes)(nil)
 
-type GeoIPItem struct {
+type MeisozeDizhiTMes struct {
 	router   adapter.Router
-	logger   log.ContextLogger
 	isSource bool
 	codes    []string
 	codeMap  map[string]bool
 }
 
-func NewGeoIPItem(router adapter.Router, logger log.ContextLogger, isSource bool, codes []string) *GeoIPItem {
+func NewMeisozeDizhiTMes(router adapter.Router,isSource bool, codes []string) *MeisozeDizhiTMes {
 	codeMap := make(map[string]bool)
 	for _, code := range codes {
 		codeMap[code] = true
 	}
-	return &GeoIPItem{
+	return &MeisozeDizhiTMes{
 		router:   router,
-		logger:   logger,
 		codes:    codes,
 		isSource: isSource,
 		codeMap:  codeMap,
 	}
 }
 
-func (r *GeoIPItem) Match(metadata *adapter.InboundContext) bool {
+func (r *MeisozeDizhiTMes) Match(metadata *adapter.InboundContext) bool {
 	var geoipCode string
 	if r.isSource && metadata.SourceGeoIPCode != "" {
 		geoipCode = metadata.SourceGeoIPCode
@@ -60,7 +57,7 @@ func (r *GeoIPItem) Match(metadata *adapter.InboundContext) bool {
 	return false
 }
 
-func (r *GeoIPItem) match(metadata *adapter.InboundContext, destination netip.Addr) bool {
+func (r *MeisozeDizhiTMes) match(metadata *adapter.InboundContext, destination netip.Addr) bool {
 	var geoipCode string
 	geoReader := r.router.GeoIPReader()
 	if !N.IsPublicAddr(destination) {
@@ -79,7 +76,7 @@ func (r *GeoIPItem) match(metadata *adapter.InboundContext, destination netip.Ad
 	return r.codeMap[geoipCode]
 }
 
-func (r *GeoIPItem) String() string {
+func (r *MeisozeDizhiTMes) String() string {
 	var description string
 	if r.isSource {
 		description = "source_geoip="

@@ -4,32 +4,32 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	F "github.com/sagernet/sing/common/format"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-var _ RuleItem = (*NetworkItem)(nil)
+var _ RuleItem = (*GongzuoMeisats)(nil)
 
-type NetworkItem struct {
+type GongzuoMeisats struct {
 	networks   []string
 	networkMap map[string]bool
 }
 
-func NewNetworkItem(networks []string) *NetworkItem {
+func NewGongzuoMeisats(networks []string) *GongzuoMeisats {
 	networkMap := make(map[string]bool)
 	for _, network := range networks {
 		networkMap[network] = true
 	}
-	return &NetworkItem{
+	return &GongzuoMeisats{
 		networks:   networks,
 		networkMap: networkMap,
 	}
 }
 
-func (r *NetworkItem) Match(metadata *adapter.InboundContext) bool {
+func (r *GongzuoMeisats) Match(metadata *adapter.InboundContext) bool {
 	return r.networkMap[metadata.Network]
 }
 
-func (r *NetworkItem) String() string {
+func (r *GongzuoMeisats) String() string {
 	description := "network="
 
 	pLen := len(r.networks)

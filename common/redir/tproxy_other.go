@@ -6,7 +6,7 @@ import (
 	"net/netip"
 	"os"
 
-	"github.com/sagernet/sing/common/control"
+	"github.com/konglong147/securefile/local/sing/common/control"
 )
 
 func TProxy(fd uintptr, isIPv6 bool) error {

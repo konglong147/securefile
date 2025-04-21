@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	E "github.com/sagernet/sing/common/exceptions"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 
 	"go4.org/netipx"
 )

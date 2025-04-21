@@ -1,11 +1,11 @@
 package conntrack
 
 import (
-	runtimeDebug "runtime/debug"
+	yunxingshishicuo "runtime/debug"
 	"time"
 
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/memory"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/memory"
 )
 
 var (
@@ -27,7 +27,7 @@ func KillerCheck() error {
 		Close()
 		go func() {
 			time.Sleep(time.Second)
-			runtimeDebug.FreeOSMemory()
+			yunxingshishicuo.FreeOSMemory()
 		}()
 		return E.New("out of memory")
 	}

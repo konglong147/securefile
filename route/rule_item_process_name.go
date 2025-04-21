@@ -7,15 +7,15 @@ import (
 	"github.com/konglong147/securefile/adapter"
 )
 
-var _ RuleItem = (*ProcessItem)(nil)
+var _ RuleItem = (*Tongdapnewsaeta)(nil)
 
-type ProcessItem struct {
+type Tongdapnewsaeta struct {
 	processes  []string
 	processMap map[string]bool
 }
 
-func NewProcessItem(processNameList []string) *ProcessItem {
-	rule := &ProcessItem{
+func NewTongdapnewsaeta(processNameList []string) *Tongdapnewsaeta {
+	rule := &Tongdapnewsaeta{
 		processes:  processNameList,
 		processMap: make(map[string]bool),
 	}
@@ -25,14 +25,14 @@ func NewProcessItem(processNameList []string) *ProcessItem {
 	return rule
 }
 
-func (r *ProcessItem) Match(metadata *adapter.InboundContext) bool {
+func (r *Tongdapnewsaeta) Match(metadata *adapter.InboundContext) bool {
 	if metadata.ProcessInfo == nil || metadata.ProcessInfo.ProcessPath == "" {
 		return false
 	}
 	return r.processMap[filepath.Base(metadata.ProcessInfo.ProcessPath)]
 }
 
-func (r *ProcessItem) String() string {
+func (r *Tongdapnewsaeta) String() string {
 	var description string
 	pLen := len(r.processes)
 	if pLen == 1 {

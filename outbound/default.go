@@ -11,14 +11,14 @@ import (
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/log"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing-dns"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/buf"
-	"github.com/sagernet/sing/common/bufio"
-	"github.com/sagernet/sing/common/canceler"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing-dns"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/buf"
+	"github.com/konglong147/securefile/local/sing/common/bufio"
+	"github.com/konglong147/securefile/local/sing/common/canceler"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type myOutboundAdapter struct {
@@ -50,9 +50,9 @@ func (a *myOutboundAdapter) NewError(ctx context.Context, err error) {
 	NewError(a.logger, ctx, err)
 }
 
-func withDialerDependency(options option.DialerOptions) []string {
-	if options.Detour != "" {
-		return []string{options.Detour}
+func withDialerDependency(yousuocanshu option.DialerOptions) []string {
+	if yousuocanshu.Detour != "" {
+		return []string{yousuocanshu.Detour}
 	}
 	return nil
 }

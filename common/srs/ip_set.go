@@ -6,9 +6,9 @@ import (
 	"os"
 	"unsafe"
 
-	"github.com/sagernet/sing/common"
-	M "github.com/sagernet/sing/common/metadata"
-	"github.com/sagernet/sing/common/varbin"
+	"github.com/konglong147/securefile/local/sing/common"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	"github.com/konglong147/securefile/local/sing/common/varbin"
 
 	"go4.org/netipx"
 )

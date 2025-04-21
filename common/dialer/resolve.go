@@ -7,11 +7,10 @@ import (
 	"time"
 
 	"github.com/konglong147/securefile/adapter"
-	"github.com/konglong147/securefile/log"
-	"github.com/sagernet/sing-dns"
-	"github.com/sagernet/sing/common/bufio"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing-dns"
+	"github.com/konglong147/securefile/local/sing/common/bufio"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type ResolveDialer struct {
@@ -37,7 +36,6 @@ func (d *ResolveDialer) DialContext(ctx context.Context, network string, destina
 		return d.dialer.DialContext(ctx, network, destination)
 	}
 	ctx, metadata := adapter.ExtendContext(ctx)
-	ctx = log.ContextWithOverrideLevel(ctx, log.LevelDebug)
 	metadata.Destination = destination
 	metadata.Domain = ""
 	var addresses []netip.Addr
@@ -62,7 +60,6 @@ func (d *ResolveDialer) ListenPacket(ctx context.Context, destination M.Socksadd
 		return d.dialer.ListenPacket(ctx, destination)
 	}
 	ctx, metadata := adapter.ExtendContext(ctx)
-	ctx = log.ContextWithOverrideLevel(ctx, log.LevelDebug)
 	metadata.Destination = destination
 	metadata.Domain = ""
 	var addresses []netip.Addr

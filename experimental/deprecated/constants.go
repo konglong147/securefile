@@ -1,12 +1,10 @@
 package deprecated
 
 import (
-	"fmt"
 
 	"github.com/konglong147/securefile/common/badversion"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/konglong147/securefile/experimental/locale"
-	F "github.com/sagernet/sing/common/format"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 
 	"golang.org/x/mod/semver"
 )
@@ -36,11 +34,7 @@ func (n Note) Impending() bool {
 }
 
 func (n Note) Message() string {
-	if n.MigrationLink != "" {
-		return fmt.Sprintf(locale.Current().DeprecatedMessage, n.Description, n.DeprecatedVersion, n.ScheduledVersion)
-	} else {
-		return fmt.Sprintf(locale.Current().DeprecatedMessageNoLink, n.Description, n.DeprecatedVersion, n.ScheduledVersion)
-	}
+	return ""
 }
 
 func (n Note) MessageWithLink() string {

@@ -9,13 +9,12 @@ import (
 	"github.com/konglong147/securefile/adapter"
 	"github.com/konglong147/securefile/common/dialer"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/konglong147/securefile/log"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing-dns"
-	"github.com/sagernet/sing/common/bufio"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing-dns"
+	"github.com/konglong147/securefile/local/sing/common/bufio"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 var (
@@ -33,9 +32,9 @@ type Direct struct {
 	loopBack            *loopBackDetector
 }
 
-func NewDirect(router adapter.Router, logger log.ContextLogger, tag string, options option.DirectOutboundOptions) (*Direct, error) {
-	options.UDPFragmentDefault = true
-	outboundDialer, err := dialer.New(router, options.DialerOptions)
+func NewDirect(router adapter.Router, tag string, yousuocanshu option.DirectOutboundOptions) (*Direct, error) {
+	yousuocanshu.UDPFragmentDefault = true
+	outboundDialer, err := dialer.New(router, yousuocanshu.DialerOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -44,27 +43,26 @@ func NewDirect(router adapter.Router, logger log.ContextLogger, tag string, opti
 			protocol:     C.TypeDirect,
 			network:      []string{N.NetworkTCP, N.NetworkUDP},
 			router:       router,
-			logger:       logger,
 			tag:          tag,
-			dependencies: withDialerDependency(options.DialerOptions),
+			dependencies: withDialerDependency(yousuocanshu.DialerOptions),
 		},
-		domainStrategy: dns.DomainStrategy(options.DomainStrategy),
-		fallbackDelay:  time.Duration(options.FallbackDelay),
+		domainStrategy: dns.DomainStrategy(yousuocanshu.DomainStrategy),
+		fallbackDelay:  time.Duration(yousuocanshu.FallbackDelay),
 		dialer:         outboundDialer,
 		loopBack:       newLoopBackDetector(router),
 	}
-	if options.ProxyProtocol != 0 {
+	if yousuocanshu.ProxyProtocol != 0 {
 		return nil, E.New("Proxy Protocol is deprecated and removed in sing-box 1.6.0")
 	}
-	if options.OverrideAddress != "" && options.OverridePort != 0 {
+	if yousuocanshu.OverrideAddress != "" && yousuocanshu.OverridePort != 0 {
 		outbound.overrideOption = 1
-		outbound.overrideDestination = M.ParseSocksaddrHostPort(options.OverrideAddress, options.OverridePort)
-	} else if options.OverrideAddress != "" {
+		outbound.overrideDestination = M.ParseSocksaddrHostPort(yousuocanshu.OverrideAddress, yousuocanshu.OverridePort)
+	} else if yousuocanshu.OverrideAddress != "" {
 		outbound.overrideOption = 2
-		outbound.overrideDestination = M.ParseSocksaddrHostPort(options.OverrideAddress, options.OverridePort)
-	} else if options.OverridePort != 0 {
+		outbound.overrideDestination = M.ParseSocksaddrHostPort(yousuocanshu.OverrideAddress, yousuocanshu.OverridePort)
+	} else if yousuocanshu.OverridePort != 0 {
 		outbound.overrideOption = 3
-		outbound.overrideDestination = M.Socksaddr{Port: options.OverridePort}
+		outbound.overrideDestination = M.Socksaddr{Port: yousuocanshu.OverridePort}
 	}
 	return outbound, nil
 }
@@ -84,12 +82,7 @@ func (h *Direct) DialContext(ctx context.Context, network string, destination M.
 		destination.Port = h.overrideDestination.Port
 	}
 	network = N.NetworkName(network)
-	switch network {
-	case N.NetworkTCP:
-		h.logger.InfoContext(ctx, "outbound connection to ", destination)
-	case N.NetworkUDP:
-		h.logger.InfoContext(ctx, "outbound packet connection to ", destination)
-	}
+	
 	conn, err := h.dialer.DialContext(ctx, network, destination)
 	if err != nil {
 		return nil, err
@@ -109,12 +102,7 @@ func (h *Direct) DialParallel(ctx context.Context, network string, destination M
 		destination.Port = h.overrideDestination.Port
 	}
 	network = N.NetworkName(network)
-	switch network {
-	case N.NetworkTCP:
-		h.logger.InfoContext(ctx, "outbound connection to ", destination)
-	case N.NetworkUDP:
-		h.logger.InfoContext(ctx, "outbound packet connection to ", destination)
-	}
+	
 	var domainStrategy dns.DomainStrategy
 	if h.domainStrategy != dns.DomainStrategyAsIS {
 		domainStrategy = h.domainStrategy
@@ -139,11 +127,7 @@ func (h *Direct) ListenPacket(ctx context.Context, destination M.Socksaddr) (net
 	case 3:
 		destination.Port = h.overrideDestination.Port
 	}
-	if h.overrideOption == 0 {
-		h.logger.InfoContext(ctx, "outbound packet connection")
-	} else {
-		h.logger.InfoContext(ctx, "outbound packet connection to ", destination)
-	}
+
 	conn, err := h.dialer.ListenPacket(ctx, destination)
 	if err != nil {
 		return nil, err

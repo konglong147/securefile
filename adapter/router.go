@@ -9,13 +9,13 @@ import (
 
 	"github.com/konglong147/securefile/common/geoip"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing-dns"
-	"github.com/sagernet/sing-tun"
-	"github.com/sagernet/sing/common/control"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
-	"github.com/sagernet/sing/common/x/list"
-	"github.com/sagernet/sing/service"
+	"github.com/konglong147/securefile/local/sing-dns"
+	"github.com/konglong147/securefile/local/sing-tun"
+	"github.com/konglong147/securefile/local/sing/common/control"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common/x/list"
+	"github.com/konglong147/securefile/local/sing/service"
 
 	mdns "github.com/miekg/dns"
 	"go4.org/netipx"
@@ -31,7 +31,6 @@ type Router interface {
 	Outbound(tag string) (Outbound, bool)
 	DefaultOutbound(network string) (Outbound, error)
 
-	FakeIPStore() FakeIPStore
 
 	ConnectionRouter
 
@@ -40,12 +39,10 @@ type Router interface {
 
 	RuleSet(tag string) (RuleSet, bool)
 
-	NeedWIFIState() bool
 
 	Exchange(ctx context.Context, message *mdns.Msg) (*mdns.Msg, error)
 	Lookup(ctx context.Context, domain string, strategy dns.DomainStrategy) ([]netip.Addr, error)
 	LookupDefault(ctx context.Context, domain string) ([]netip.Addr, error)
-	ClearDNSCache()
 
 	InterfaceFinder() control.InterfaceFinder
 	UpdateInterfaces() error

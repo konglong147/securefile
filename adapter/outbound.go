@@ -4,7 +4,7 @@ import (
 	"context"
 	"net"
 
-	N "github.com/sagernet/sing/common/network"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 // Note: for proxy protocols, outbound creates early connections by default.

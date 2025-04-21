@@ -8,8 +8,8 @@ import (
 	"os"
 )
 
-const go120Available = false
+const keyishiyongzhege20 = false
 
-func listenTFO(listenConfig net.ListenConfig, ctx context.Context, network string, address string) (net.Listener, error) {
+func tingwoshuoFeilei(listenConfig net.ListenConfig, ctx context.Context, network string, address string) (net.Listener, error) {
 	return nil, os.ErrInvalid
 }

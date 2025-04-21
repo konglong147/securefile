@@ -5,18 +5,18 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-var _ RuleItem = (*ProcessPathRegexItem)(nil)
+var _ RuleItem = (*dizhibuxngGeisheizhi)(nil)
 
-type ProcessPathRegexItem struct {
+type dizhibuxngGeisheizhi struct {
 	matchers    []*regexp.Regexp
 	description string
 }
 
-func NewProcessPathRegexItem(expressions []string) (*ProcessPathRegexItem, error) {
+func NewdizhibuxngGeisheizhi(expressions []string) (*dizhibuxngGeisheizhi, error) {
 	matchers := make([]*regexp.Regexp, 0, len(expressions))
 	for i, regex := range expressions {
 		matcher, err := regexp.Compile(regex)
@@ -34,10 +34,10 @@ func NewProcessPathRegexItem(expressions []string) (*ProcessPathRegexItem, error
 	} else {
 		description += F.ToString("[", strings.Join(expressions, " "), "]")
 	}
-	return &ProcessPathRegexItem{matchers, description}, nil
+	return &dizhibuxngGeisheizhi{matchers, description}, nil
 }
 
-func (r *ProcessPathRegexItem) Match(metadata *adapter.InboundContext) bool {
+func (r *dizhibuxngGeisheizhi) Match(metadata *adapter.InboundContext) bool {
 	if metadata.ProcessInfo == nil || metadata.ProcessInfo.ProcessPath == "" {
 		return false
 	}
@@ -49,6 +49,6 @@ func (r *ProcessPathRegexItem) Match(metadata *adapter.InboundContext) bool {
 	return false
 }
 
-func (r *ProcessPathRegexItem) String() string {
+func (r *dizhibuxngGeisheizhi) String() string {
 	return r.description
 }

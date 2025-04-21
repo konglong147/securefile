@@ -4,8 +4,8 @@ package dialer
 
 import "net"
 
-const go121Available = true
+const haishiyonzhege21 = true
 
-func setMultiPathTCP(dialer *net.Dialer) {
+func shezhiHenduoDizhipeise(dialer *net.Dialer) {
 	dialer.SetMultipathTCP(true)
 }

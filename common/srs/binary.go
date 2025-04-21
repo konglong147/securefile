@@ -9,10 +9,10 @@ import (
 
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/domain"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/varbin"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/domain"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/varbin"
 
 	"go4.org/netipx"
 )

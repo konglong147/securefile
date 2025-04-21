@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"github.com/konglong147/securefile/adapter"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type loopBackDetector struct {
@@ -31,7 +31,7 @@ func (l *loopBackDetector) NewConn(conn net.Conn) net.Conn {
 	if !source.IsValid() {
 		return conn
 	}
-	if udpConn, isUDPConn := conn.(abstractUDPConn); isUDPConn {
+	if odeonnoCnet, isUDPConn := conn.(abstractUDPConn); isUDPConn {
 		if !source.Addr().IsLoopback() {
 			_, err := l.router.InterfaceFinder().InterfaceByAddr(source.Addr())
 			if err != nil {
@@ -44,7 +44,7 @@ func (l *loopBackDetector) NewConn(conn net.Conn) net.Conn {
 		l.packetConnAccess.Lock()
 		l.packetConnMap[source.Port()] = M.AddrPortFromNet(conn.RemoteAddr()).Port()
 		l.packetConnAccess.Unlock()
-		return &loopBackDetectUDPWrapper{abstractUDPConn: udpConn, detector: l, connPort: source.Port()}
+		return &loopBackDetectUDPWrapper{abstractUDPConn: odeonnoCnet, detector: l, connPort: source.Port()}
 	} else {
 		l.connAccess.Lock()
 		l.connMap[source] = M.AddrPortFromNet(conn.RemoteAddr())

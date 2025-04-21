@@ -1,18 +1,15 @@
 package process
 
 import (
-	"context"
-	"net/netip"
-	"os/user"
 
 	"github.com/konglong147/securefile/log"
-	"github.com/sagernet/sing-tun"
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
+	"github.com/konglong147/securefile/local/sing-tun"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+
 )
 
 type Searcher interface {
-	FindProcessInfo(ctx context.Context, network string, source netip.AddrPort, destination netip.AddrPort) (*Info, error)
+	
 }
 
 var ErrNotFound = E.New("process not found")
@@ -27,18 +24,4 @@ type Info struct {
 	PackageName string
 	User        string
 	UserId      int32
-}
-
-func FindProcessInfo(searcher Searcher, ctx context.Context, network string, source netip.AddrPort, destination netip.AddrPort) (*Info, error) {
-	info, err := searcher.FindProcessInfo(ctx, network, source, destination)
-	if err != nil {
-		return nil, err
-	}
-	if info.UserId != -1 {
-		osUser, _ := user.LookupId(F.ToString(info.UserId))
-		if osUser != nil {
-			info.User = osUser.Username
-		}
-	}
-	return info, nil
 }

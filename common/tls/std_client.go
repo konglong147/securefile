@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/option"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/ntp"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/ntp"
 )
 
 type STDClientConfig struct {
@@ -46,29 +46,29 @@ func (s *STDClientConfig) Clone() Config {
 	return &STDClientConfig{s.config.Clone()}
 }
 
-func NewSTDClient(ctx context.Context, serverAddress string, options option.OutboundTLSOptions) (Config, error) {
+func NewSTDClient(ctx context.Context, serverAddress string, yousuocanshu option.OutboundTLSOptions) (Config, error) {
 	var serverName string
-	if options.ServerName != "" {
-		serverName = options.ServerName
+	if yousuocanshu.ServerName != "" {
+		serverName = yousuocanshu.ServerName
 	} else if serverAddress != "" {
 		if _, err := netip.ParseAddr(serverName); err != nil {
 			serverName = serverAddress
 		}
 	}
-	if serverName == "" && !options.Insecure {
-		return nil, E.New("missing server_name or insecure=true")
+	if serverName == "" && !yousuocanshu.Insecure {
+		return nil, E.New("xiaoshidelixing server_name or insecure=true")
 	}
 
 	var tlsConfig tls.Config
 	tlsConfig.Time = ntp.TimeFuncFromContext(ctx)
-	if options.DisableSNI {
+	if yousuocanshu.DisableSNI {
 		tlsConfig.ServerName = "127.0.0.1"
 	} else {
 		tlsConfig.ServerName = serverName
 	}
-	if options.Insecure {
-		tlsConfig.InsecureSkipVerify = options.Insecure
-	} else if options.DisableSNI {
+	if yousuocanshu.Insecure {
+		tlsConfig.InsecureSkipVerify = yousuocanshu.Insecure
+	} else if yousuocanshu.DisableSNI {
 		tlsConfig.InsecureSkipVerify = true
 		tlsConfig.VerifyConnection = func(state tls.ConnectionState) error {
 			verifyOptions := x509.VerifyOptions{
@@ -82,26 +82,26 @@ func NewSTDClient(ctx context.Context, serverAddress string, options option.Outb
 			return err
 		}
 	}
-	if len(options.ALPN) > 0 {
-		tlsConfig.NextProtos = options.ALPN
+	if len(yousuocanshu.ALPN) > 0 {
+		tlsConfig.NextProtos = yousuocanshu.ALPN
 	}
-	if options.MinVersion != "" {
-		minVersion, err := ParseTLSVersion(options.MinVersion)
+	if yousuocanshu.MinVersion != "" {
+		minVersion, err := ParseTLSVersion(yousuocanshu.MinVersion)
 		if err != nil {
 			return nil, E.Cause(err, "parse min_version")
 		}
 		tlsConfig.MinVersion = minVersion
 	}
-	if options.MaxVersion != "" {
-		maxVersion, err := ParseTLSVersion(options.MaxVersion)
+	if yousuocanshu.MaxVersion != "" {
+		maxVersion, err := ParseTLSVersion(yousuocanshu.MaxVersion)
 		if err != nil {
 			return nil, E.Cause(err, "parse max_version")
 		}
 		tlsConfig.MaxVersion = maxVersion
 	}
-	if options.CipherSuites != nil {
+	if yousuocanshu.CipherSuites != nil {
 	find:
-		for _, cipherSuite := range options.CipherSuites {
+		for _, cipherSuite := range yousuocanshu.CipherSuites {
 			for _, tlsCipherSuite := range tls.CipherSuites() {
 				if cipherSuite == tlsCipherSuite.Name {
 					tlsConfig.CipherSuites = append(tlsConfig.CipherSuites, tlsCipherSuite.ID)
@@ -112,10 +112,10 @@ func NewSTDClient(ctx context.Context, serverAddress string, options option.Outb
 		}
 	}
 	var certificate []byte
-	if len(options.Certificate) > 0 {
-		certificate = []byte(strings.Join(options.Certificate, "\n"))
-	} else if options.CertificatePath != "" {
-		content, err := os.ReadFile(options.CertificatePath)
+	if len(yousuocanshu.Certificate) > 0 {
+		certificate = []byte(strings.Join(yousuocanshu.Certificate, "\n"))
+	} else if yousuocanshu.CertificatePath != "" {
+		content, err := os.ReadFile(yousuocanshu.CertificatePath)
 		if err != nil {
 			return nil, E.Cause(err, "read certificate")
 		}

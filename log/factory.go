@@ -1,15 +1,15 @@
 package log
 
 import (
-	"github.com/sagernet/sing/common/logger"
-	"github.com/sagernet/sing/common/observable"
+	"github.com/konglong147/securefile/local/sing/common/logger"
+	"github.com/konglong147/securefile/local/sing/common/observable"
 )
 
 type (
 	Logger        logger.Logger
 	ContextLogger logger.ContextLogger
 )
-
+// TempfoxvSecureTemp
 type Factory interface {
 	Start() error
 	Close() error

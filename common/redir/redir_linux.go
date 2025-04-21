@@ -7,9 +7,9 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/control"
-	M "github.com/sagernet/sing/common/metadata"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/control"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
 )
 
 func GetOriginalDestination(conn net.Conn) (destination netip.AddrPort, err error) {

@@ -8,11 +8,9 @@ import (
 	"time"
 
 	"github.com/konglong147/securefile/adapter"
-	"github.com/sagernet/sing-dns"
-	"github.com/sagernet/sing/common/cache"
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
-	M "github.com/sagernet/sing/common/metadata"
+	"github.com/konglong147/securefile/local/sing-dns"
+	"github.com/konglong147/securefile/local/sing/common/cache"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
 
 	mDNS "github.com/miekg/dns"
 )
@@ -55,7 +53,6 @@ func (r *Router) matchDNS(ctx context.Context, allowFakeIP bool, index int, isAd
 				detour := rule.Outbound()
 				transport, loaded := r.transportMap[detour]
 				if !loaded {
-					r.dnsLogger.ErrorContext(ctx, "transport not found: ", detour)
 					continue
 				}
 				_, isFakeIP := transport.(adapter.FakeIPTransport)
@@ -66,7 +63,6 @@ func (r *Router) matchDNS(ctx context.Context, allowFakeIP bool, index int, isAd
 				if index != -1 {
 					ruleIndex += index + 1
 				}
-				r.dnsLogger.DebugContext(ctx, "match[", ruleIndex, "] ", rule.String(), " => ", detour)
 				if isFakeIP || rule.DisableCache() {
 					ctx = dns.ContextWithDisableCache(ctx, true)
 				}
@@ -93,7 +89,6 @@ func (r *Router) matchDNS(ctx context.Context, allowFakeIP bool, index int, isAd
 
 func (r *Router) Exchange(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, error) {
 	if len(message.Question) > 0 {
-		r.dnsLogger.DebugContext(ctx, "exchange ", formatQuestion(message.Question[0].String()))
 	}
 	var (
 		response  *mDNS.Msg
@@ -147,15 +142,11 @@ func (r *Router) Exchange(ctx context.Context, message *mDNS.Msg) (*mDNS.Msg, er
 			if err != nil {
 				if errors.Is(err, dns.ErrResponseRejectedCached) {
 					rejected = true
-					r.dnsLogger.DebugContext(ctx, E.Cause(err, "response rejected for ", formatQuestion(message.Question[0].String())), " (cached)")
+
 				} else if errors.Is(err, dns.ErrResponseRejected) {
 					rejected = true
-					r.dnsLogger.DebugContext(ctx, E.Cause(err, "response rejected for ", formatQuestion(message.Question[0].String())))
-				} else if len(message.Question) > 0 {
-					r.dnsLogger.ErrorContext(ctx, E.Cause(err, "exchange failed for ", formatQuestion(message.Question[0].String())))
-				} else {
-					r.dnsLogger.ErrorContext(ctx, E.Cause(err, "exchange failed for <empty query>"))
-				}
+
+				} 
 			}
 			if addressLimit && rejected {
 				continue
@@ -194,7 +185,6 @@ func (r *Router) Lookup(ctx context.Context, domain string, strategy dns.DomainS
 		}
 		return responseAddrs, nil
 	}
-	r.dnsLogger.DebugContext(ctx, "lookup domain ", domain)
 	ctx, metadata := adapter.ExtendContext(ctx)
 	metadata.Destination = M.Socksaddr{}
 	metadata.Domain = domain
@@ -226,23 +216,12 @@ func (r *Router) Lookup(ctx context.Context, domain string, strategy dns.DomainS
 			responseAddrs, err = r.dnsClient.Lookup(dnsCtx, transport, domain, strategy)
 		}
 		if err != nil {
-			if errors.Is(err, dns.ErrResponseRejectedCached) {
-				r.dnsLogger.DebugContext(ctx, "response rejected for ", domain, " (cached)")
-			} else if errors.Is(err, dns.ErrResponseRejected) {
-				r.dnsLogger.DebugContext(ctx, "response rejected for ", domain)
-			} else {
-				r.dnsLogger.ErrorContext(ctx, E.Cause(err, "lookup failed for ", domain))
-			}
 		} else if len(responseAddrs) == 0 {
-			r.dnsLogger.ErrorContext(ctx, "lookup failed for ", domain, ": empty result")
 			err = dns.RCodeNameError
 		}
 		if !addressLimit || err == nil {
 			break
 		}
-	}
-	if len(responseAddrs) > 0 {
-		r.dnsLogger.InfoContext(ctx, "lookup succeed for ", domain, ": ", strings.Join(F.MapToString(responseAddrs), " "))
 	}
 	return responseAddrs, err
 }
@@ -251,12 +230,6 @@ func (r *Router) LookupDefault(ctx context.Context, domain string) ([]netip.Addr
 	return r.Lookup(ctx, domain, dns.DomainStrategyAsIS)
 }
 
-func (r *Router) ClearDNSCache() {
-	r.dnsClient.ClearCache()
-	if r.platformInterface != nil {
-		r.platformInterface.ClearDNSCache()
-	}
-}
 
 func isAddressQuery(message *mDNS.Msg) bool {
 	for _, question := range message.Question {

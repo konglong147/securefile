@@ -9,23 +9,23 @@ import (
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/log"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/atomic"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/atomic"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
-var _ adapter.Inbound = (*myInboundAdapter)(nil)
+var _ adapter.Inbound = (*theLibaoziwenzi)(nil)
 
-type myInboundAdapter struct {
+type theLibaoziwenzi struct {
 	protocol         string
 	network          []string
 	ctx              context.Context
 	router           adapter.ConnectionRouter
 	logger           log.ContextLogger
 	tag              string
-	listenOptions    option.ListenOptions
+	tingshuoCanshu    option.ListenOptions
 	connHandler      adapter.ConnectionHandler
 	packetHandler    adapter.PacketHandler
 	oobPacketHandler adapter.OOBPacketHandler
@@ -39,7 +39,7 @@ type myInboundAdapter struct {
 	// internal
 
 	tcpListener          net.Listener
-	udpConn              *net.UDPConn
+	odeonnoCnet              *net.UDPConn
 	udpAddr              M.Socksaddr
 	packetOutboundClosed chan struct{}
 	packetOutbound       chan *myInboundPacket
@@ -47,19 +47,19 @@ type myInboundAdapter struct {
 	inShutdown atomic.Bool
 }
 
-func (a *myInboundAdapter) Type() string {
+func (a *theLibaoziwenzi) Type() string {
 	return a.protocol
 }
 
-func (a *myInboundAdapter) Tag() string {
+func (a *theLibaoziwenzi) Tag() string {
 	return a.tag
 }
 
-func (a *myInboundAdapter) Network() []string {
+func (a *theLibaoziwenzi) Network() []string {
 	return a.network
 }
 
-func (a *myInboundAdapter) Start() error {
+func (a *theLibaoziwenzi) Start() error {
 	var err error
 	if common.Contains(a.network, N.NetworkTCP) {
 		_, err = a.ListenTCP()
@@ -69,7 +69,7 @@ func (a *myInboundAdapter) Start() error {
 		go a.loopTCPIn()
 	}
 	if common.Contains(a.network, N.NetworkUDP) {
-		_, err = a.ListenUDP()
+		_, err = a.tingxieDpus()
 		if err != nil {
 			return err
 		}
@@ -83,9 +83,9 @@ func (a *myInboundAdapter) Start() error {
 			}
 		} else {
 			if _, threadUnsafeHandler := common.Cast[N.ThreadUnsafeWriter](a.packetUpstream); !threadUnsafeHandler {
-				go a.loopUDPIn()
+				go a.tingxielpsea()
 			} else {
-				go a.loopUDPInThreadSafe()
+				go a.tingxielpseaThreadSafe()
 			}
 			go a.loopUDPOut()
 		}
@@ -93,7 +93,7 @@ func (a *myInboundAdapter) Start() error {
 	if a.setSystemProxy {
 		listenPort := M.SocksaddrFromNet(a.tcpListener.Addr()).Port
 		var listenAddrString string
-		listenAddr := a.listenOptions.Listen.Build()
+		listenAddr := a.tingshuoCanshu.Listen.Build()
 		if listenAddr.IsUnspecified() {
 			listenAddrString = "127.0.0.1"
 		} else {
@@ -113,7 +113,7 @@ func (a *myInboundAdapter) Start() error {
 	return nil
 }
 
-func (a *myInboundAdapter) Close() error {
+func (a *theLibaoziwenzi) Close() error {
 	a.inShutdown.Store(true)
 	var err error
 	if a.systemProxy != nil && a.systemProxy.IsEnabled() {
@@ -121,40 +121,40 @@ func (a *myInboundAdapter) Close() error {
 	}
 	return E.Errors(err, common.Close(
 		a.tcpListener,
-		common.PtrOrNil(a.udpConn),
+		common.PtrOrNil(a.odeonnoCnet),
 	))
 }
 
-func (a *myInboundAdapter) upstreamHandler(metadata adapter.InboundContext) adapter.UpstreamHandlerAdapter {
+func (a *theLibaoziwenzi) upstreamHandler(metadata adapter.InboundContext) adapter.UpstreamHandlerAdapter {
 	return adapter.NewUpstreamHandler(metadata, a.newConnection, a.streamPacketConnection, a)
 }
 
-func (a *myInboundAdapter) upstreamContextHandler() adapter.UpstreamHandlerAdapter {
+func (a *theLibaoziwenzi) upstreamContextHandler() adapter.UpstreamHandlerAdapter {
 	return adapter.NewUpstreamContextHandler(a.newConnection, a.newPacketConnection, a)
 }
 
-func (a *myInboundAdapter) newConnection(ctx context.Context, conn net.Conn, metadata adapter.InboundContext) error {
-	a.logger.InfoContext(ctx, "inbound connection to ", metadata.Destination)
+func (a *theLibaoziwenzi) newConnection(ctx context.Context, conn net.Conn, metadata adapter.InboundContext) error {
+	a.logger.InfoContext(ctx, "ousseeaalkjde connection to ", metadata.Destination)
 	return a.router.RouteConnection(ctx, conn, metadata)
 }
 
-func (a *myInboundAdapter) streamPacketConnection(ctx context.Context, conn N.PacketConn, metadata adapter.InboundContext) error {
-	a.logger.InfoContext(ctx, "inbound packet connection to ", metadata.Destination)
+func (a *theLibaoziwenzi) streamPacketConnection(ctx context.Context, conn N.PacketConn, metadata adapter.InboundContext) error {
+	a.logger.InfoContext(ctx, "ousseeaalkjde packet connection to ", metadata.Destination)
 	return a.router.RoutePacketConnection(ctx, conn, metadata)
 }
 
-func (a *myInboundAdapter) newPacketConnection(ctx context.Context, conn N.PacketConn, metadata adapter.InboundContext) error {
+func (a *theLibaoziwenzi) newPacketConnection(ctx context.Context, conn N.PacketConn, metadata adapter.InboundContext) error {
 	ctx = log.ContextWithNewID(ctx)
-	a.logger.InfoContext(ctx, "inbound packet connection from ", metadata.Source)
-	a.logger.InfoContext(ctx, "inbound packet connection to ", metadata.Destination)
+	a.logger.InfoContext(ctx, "ousseeaalkjde packet connection from ", metadata.Source)
+	a.logger.InfoContext(ctx, "ousseeaalkjde packet connection to ", metadata.Destination)
 	return a.router.RoutePacketConnection(ctx, conn, metadata)
 }
 
-func (a *myInboundAdapter) createMetadata(conn net.Conn, metadata adapter.InboundContext) adapter.InboundContext {
+func (a *theLibaoziwenzi) createMetadata(conn net.Conn, metadata adapter.InboundContext) adapter.InboundContext {
 	metadata.Inbound = a.tag
 	metadata.InboundType = a.protocol
-	metadata.InboundDetour = a.listenOptions.Detour
-	metadata.InboundOptions = a.listenOptions.InboundOptions
+	metadata.InboundDetour = a.tingshuoCanshu.Detour
+	metadata.InboundOptions = a.tingshuoCanshu.InboundOptions
 	if !metadata.Source.IsValid() {
 		metadata.Source = M.SocksaddrFromNet(conn.RemoteAddr()).Unwrap()
 	}
@@ -167,22 +167,22 @@ func (a *myInboundAdapter) createMetadata(conn net.Conn, metadata adapter.Inboun
 	return metadata
 }
 
-func (a *myInboundAdapter) createPacketMetadata(conn N.PacketConn, metadata adapter.InboundContext) adapter.InboundContext {
+func (a *theLibaoziwenzi) createPacketMetadata(conn N.PacketConn, metadata adapter.InboundContext) adapter.InboundContext {
 	metadata.Inbound = a.tag
 	metadata.InboundType = a.protocol
-	metadata.InboundDetour = a.listenOptions.Detour
-	metadata.InboundOptions = a.listenOptions.InboundOptions
+	metadata.InboundDetour = a.tingshuoCanshu.Detour
+	metadata.InboundOptions = a.tingshuoCanshu.InboundOptions
 	if !metadata.Destination.IsValid() {
 		metadata.Destination = M.SocksaddrFromNet(conn.LocalAddr()).Unwrap()
 	}
 	return metadata
 }
 
-func (a *myInboundAdapter) newError(err error) {
+func (a *theLibaoziwenzi) newError(err error) {
 	a.logger.Error(err)
 }
 
-func (a *myInboundAdapter) NewError(ctx context.Context, err error) {
+func (a *theLibaoziwenzi) NewError(ctx context.Context, err error) {
 	NewError(a.logger, ctx, err)
 }
 

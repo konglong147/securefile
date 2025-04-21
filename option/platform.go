@@ -1,8 +1,8 @@
 package option
 
 import (
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/json"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/json"
 )
 
 type OnDemandOptions struct {

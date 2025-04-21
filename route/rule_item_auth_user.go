@@ -4,32 +4,32 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	F "github.com/sagernet/sing/common/format"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-var _ RuleItem = (*AuthUserItem)(nil)
+var _ RuleItem = (*AuthYonghumetise)(nil)
 
-type AuthUserItem struct {
+type AuthYonghumetise struct {
 	users   []string
 	userMap map[string]bool
 }
 
-func NewAuthUserItem(users []string) *AuthUserItem {
+func NewAuthYonghumetise(users []string) *AuthYonghumetise {
 	userMap := make(map[string]bool)
 	for _, protocol := range users {
 		userMap[protocol] = true
 	}
-	return &AuthUserItem{
+	return &AuthYonghumetise{
 		users:   users,
 		userMap: userMap,
 	}
 }
 
-func (r *AuthUserItem) Match(metadata *adapter.InboundContext) bool {
+func (r *AuthYonghumetise) Match(metadata *adapter.InboundContext) bool {
 	return r.userMap[metadata.User]
 }
 
-func (r *AuthUserItem) String() string {
+func (r *AuthYonghumetise) String() string {
 	if len(r.users) == 1 {
 		return F.ToString("auth_user=", r.users[0])
 	}

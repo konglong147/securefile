@@ -8,8 +8,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/varbin"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/varbin"
 )
 
 type Reader struct {

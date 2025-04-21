@@ -1,56 +1,37 @@
-package Foxboxvpn
+package HuSecure
 
-import "github.com/sagernet/sing/common"
+import "github.com/konglong147/securefile/local/sing/common"
 
-type StringIterator interface {
+type WenziToerit interface {
 	Len() int32
-	HasNext() bool
+	YongyouGeXia() bool
 	Next() string
 }
 
-var _ StringIterator = (*iterator[string])(nil)
+var _ WenziToerit = (*dutader[string])(nil)
 
-type iterator[T any] struct {
+type dutader[T any] struct {
 	values []T
 }
 
-func newIterator[T any](values []T) *iterator[T] {
-	return &iterator[T]{values}
+func newIterator[T any](values []T) *dutader[T] {
+	return &dutader[T]{values}
 }
 
-func newPtrIterator[T any](values []T) *iterator[*T] {
-	return &iterator[*T]{common.Map(values, func(value T) *T { return &value })}
-}
 
-func (i *iterator[T]) Len() int32 {
+func (i *dutader[T]) Len() int32 {
 	return int32(len(i.values))
 }
 
-func (i *iterator[T]) HasNext() bool {
+func (i *dutader[T]) YongyouGeXia() bool {
 	return len(i.values) > 0
 }
 
-func (i *iterator[T]) Next() T {
+func (i *dutader[T]) Next() T {
 	if len(i.values) == 0 {
 		return common.DefaultValue[T]()
 	}
 	nextValue := i.values[0]
 	i.values = i.values[1:]
 	return nextValue
-}
-
-type abstractIterator[T any] interface {
-	Next() T
-	HasNext() bool
-}
-
-func iteratorToArray[T any](iterator abstractIterator[T]) []T {
-	if iterator == nil {
-		return nil
-	}
-	var values []T
-	for iterator.HasNext() {
-		values = append(values, iterator.Next())
-	}
-	return values
 }

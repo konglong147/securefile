@@ -5,18 +5,18 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing/common"
+	"github.com/konglong147/securefile/local/sing/common"
 )
 
-var _ RuleItem = (*QueryTypeItem)(nil)
+var _ RuleItem = (*QuntiShijinLeixing)(nil)
 
-type QueryTypeItem struct {
+type QuntiShijinLeixing struct {
 	typeList []uint16
 	typeMap  map[uint16]bool
 }
 
-func NewQueryTypeItem(typeList []option.DNSQueryType) *QueryTypeItem {
-	rule := &QueryTypeItem{
+func NewQuntiShijinLeixing(typeList []option.DNSQueryType) *QuntiShijinLeixing {
+	rule := &QuntiShijinLeixing{
 		typeList: common.Map(typeList, func(it option.DNSQueryType) uint16 {
 			return uint16(it)
 		}),
@@ -28,14 +28,14 @@ func NewQueryTypeItem(typeList []option.DNSQueryType) *QueryTypeItem {
 	return rule
 }
 
-func (r *QueryTypeItem) Match(metadata *adapter.InboundContext) bool {
+func (r *QuntiShijinLeixing) Match(metadata *adapter.InboundContext) bool {
 	if metadata.QueryType == 0 {
 		return false
 	}
 	return r.typeMap[metadata.QueryType]
 }
 
-func (r *QueryTypeItem) String() string {
+func (r *QuntiShijinLeixing) String() string {
 	var description string
 	pLen := len(r.typeList)
 	if pLen == 1 {

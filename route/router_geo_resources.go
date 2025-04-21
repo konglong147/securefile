@@ -13,10 +13,10 @@ import (
 	"github.com/konglong147/securefile/common/geosite"
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/experimental/deprecated"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	"github.com/sagernet/sing/common/rw"
-	"github.com/sagernet/sing/service/filemanager"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	"github.com/konglong147/securefile/local/sing/common/rw"
+	"github.com/konglong147/securefile/local/sing/service/filemanager"
 )
 
 func (r *Router) GeoIPReader() *geoip.Reader {
@@ -32,7 +32,7 @@ func (r *Router) LoadGeosite(code string) (adapter.Rule, error) {
 	if err != nil {
 		return nil, err
 	}
-	rule, err = NewDefaultRule(r.ctx, r, nil, geosite.Compile(items))
+	rule, err = NewDefaultRule(r.ctx, r, geosite.Compile(items))
 	if err != nil {
 		return nil, err
 	}
@@ -63,14 +63,12 @@ func (r *Router) prepareGeoIPDatabase() error {
 		}
 	}
 	if !rw.IsFile(geoPath) {
-		r.logger.Warn("geoip database not exists: ", geoPath)
 		var err error
 		for attempts := 0; attempts < 3; attempts++ {
 			err = r.downloadGeoIPDatabase(geoPath)
 			if err == nil {
 				break
 			}
-			r.logger.Error("download geoip database: ", err)
 			os.Remove(geoPath)
 			// time.Sleep(10 * time.Second)
 		}
@@ -78,11 +76,10 @@ func (r *Router) prepareGeoIPDatabase() error {
 			return err
 		}
 	}
-	geoReader, codes, err := geoip.Open(geoPath)
+	geoReader, _, err := geoip.Open(geoPath)
 	if err != nil {
 		return E.Cause(err, "open geoip database")
 	}
-	r.logger.Info("loaded geoip database: ", len(codes), " codes")
 	r.geoIPReader = geoReader
 	return nil
 }
@@ -110,23 +107,20 @@ func (r *Router) prepareGeositeDatabase() error {
 		}
 	}
 	if !rw.IsFile(geoPath) {
-		r.logger.Warn("geosite database not exists: ", geoPath)
 		var err error
 		for attempts := 0; attempts < 3; attempts++ {
 			err = r.downloadGeositeDatabase(geoPath)
 			if err == nil {
 				break
 			}
-			r.logger.Error("download geosite database: ", err)
 			os.Remove(geoPath)
 		}
 		if err != nil {
 			return err
 		}
 	}
-	geoReader, codes, err := geosite.Open(geoPath)
+	geoReader, _, err := geosite.Open(geoPath)
 	if err == nil {
-		r.logger.Info("loaded geosite database: ", len(codes), " codes")
 		r.geositeReader = geoReader
 	} else {
 		return E.Cause(err, "open geosite database")
@@ -141,7 +135,6 @@ func (r *Router) downloadGeoIPDatabase(savePath string) error {
 	} else {
 		downloadURL = "https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db"
 	}
-	r.logger.Info("downloading geoip database")
 	var detour adapter.Outbound
 	if r.geoIPOptions.DownloadDetour != "" {
 		outbound, loaded := r.Outbound(r.geoIPOptions.DownloadDetour)
@@ -196,7 +189,6 @@ func (r *Router) downloadGeositeDatabase(savePath string) error {
 	} else {
 		downloadURL = "https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db"
 	}
-	r.logger.Info("downloading geosite database")
 	var detour adapter.Outbound
 	if r.geositeOptions.DownloadDetour != "" {
 		outbound, loaded := r.Outbound(r.geositeOptions.DownloadDetour)

@@ -1,39 +1,19 @@
 package platform
 
 import (
-	"context"
-
-	"github.com/konglong147/securefile/adapter"
 	"github.com/konglong147/securefile/common/process"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing-tun"
-	"github.com/sagernet/sing/common/control"
-	"github.com/sagernet/sing/common/logger"
+	"github.com/konglong147/securefile/local/sing-tun"
 )
-
-type Interface interface {
-	Initialize(ctx context.Context, router adapter.Router) error
-	UsePlatformAutoDetectInterfaceControl() bool
-	AutoDetectInterfaceControl(fd int) error
-	OpenTun(options *tun.Options, platformOptions option.TunPlatformOptions) (tun.Tun, error)
-	UsePlatformDefaultInterfaceMonitor() bool
-	CreateDefaultInterfaceMonitor(logger logger.Logger) tun.DefaultInterfaceMonitor
-	UsePlatformInterfaceGetter() bool
-	Interfaces() ([]control.Interface, error)
-	UnderNetworkExtension() bool
-	IncludeAllNetworks() bool
-	ClearDNSCache()
-	ReadWIFIState() adapter.WIFIState
+// TempfoxvSecureTemp
+type LuowangLian interface {
+	// TempfoxvSecureTemp
+	KaiDaZheZhuanWithD(yousuocanshu *tun.Options, platformOptions option.TaipingForShuju) (tun.Tun, error)
+	// TempfoxvSecureTemp
+	ZhanHuoWanLeXia() bool
+	// TempfoxvSecureTemp
+	LuoWangHanYouSuo() bool
+	// TempfoxvSecureTemp
 	process.Searcher
-	SendNotification(notification *Notification) error
 }
 
-type Notification struct {
-	Identifier string
-	TypeName   string
-	TypeID     int32
-	Title      string
-	Subtitle   string
-	Body       string
-	OpenURL    string
-}

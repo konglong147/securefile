@@ -9,10 +9,7 @@ import (
 
 	_ "github.com/sagernet/gomobile"
 	"github.com/konglong147/securefile/cmd/internal/build_shared"
-	"github.com/konglong147/securefile/log"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/rw"
-	"github.com/sagernet/sing/common/shell"
+	"github.com/konglong147/securefile/local/sing/common/rw"
 )
 
 var (
@@ -23,7 +20,7 @@ var (
 
 func init() {
 	flag.BoolVar(&debugEnabled, "debug", false, "enable debug")
-	flag.StringVar(&target, "target", "android", "target platform")
+	flag.StringVar(&target, "target", "", "target platform")
 	flag.StringVar(&platform, "platform", "", "specify platform")
 }
 
@@ -33,8 +30,6 @@ func main() {
 	build_shared.FindMobile()
 
 	switch target {
-	case "android":
-		buildAndroid()
 	case "apple":
 		buildApple()
 	}
@@ -63,75 +58,7 @@ func init() {
 	debugTags = append(debugTags, "debug")
 }
 
-func buildAndroid() {
-	build_shared.FindSDK()
 
-	var javaPath string
-	javaHome := os.Getenv("JAVA_HOME")
-	if javaHome == "" {
-		javaPath = "java"
-	} else {
-		javaPath = filepath.Join(javaHome, "bin", "java")
-	}
-
-	javaVersion, err := shell.Exec(javaPath, "--version").ReadOutput()
-	if err != nil {
-		log.Fatal(E.Cause(err, "check java version"))
-	}
-	if !strings.Contains(javaVersion, "openjdk 17") {
-		log.Fatal("java version should be openjdk 17")
-	}
-
-	var bindTarget string
-	if platform != "" {
-		bindTarget = platform
-	} else if debugEnabled {
-		bindTarget = "android/arm64"
-	} else {
-		bindTarget = "android"
-	}
-
-	args := []string{
-		"bind",
-		"-v",
-		"-target", bindTarget,
-		"-androidapi", "21",
-		"-javapkg=io.nekohasekai",
-		"-libname=box",
-	}
-	if !debugEnabled {
-		args = append(args, sharedFlags...)
-	} else {
-		args = append(args, debugFlags...)
-	}
-
-	args = append(args, "-tags")
-	if !debugEnabled {
-		args = append(args, strings.Join(sharedTags, ","))
-	} else {
-		args = append(args, strings.Join(append(sharedTags, debugTags...), ","))
-	}
-	args = append(args, "./experimental/libbox")
-
-	command := exec.Command(build_shared.GoBinPath+"/gomobile", args...)
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-	err = command.Run()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	const name = "libbox.aar"
-	copyPath := filepath.Join("..", "sing-box-for-android", "app", "libs")
-	if rw.IsDir(copyPath) {
-		copyPath, _ = filepath.Abs(copyPath)
-		err = rw.CopyFile(name, filepath.Join(copyPath, name))
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Info("copied to ", copyPath)
-	}
-}
 
 func buildApple() {
 	var bindTarget string
@@ -169,15 +96,13 @@ func buildApple() {
 	command.Stderr = os.Stderr
 	err := command.Run()
 	if err != nil {
-		log.Fatal(err)
 	}
 
 	copyPath := filepath.Join("..", "sing-box-for-apple")
 	if rw.IsDir(copyPath) {
-		targetDir := filepath.Join(copyPath, "Foxboxvpn.xcframework")
+		targetDir := filepath.Join(copyPath, "HuSecure.xcframework")
 		targetDir, _ = filepath.Abs(targetDir)
 		os.RemoveAll(targetDir)
-		os.Rename("Foxboxvpn.xcframework", targetDir)
-		log.Info("copied to ", targetDir)
+		os.Rename("HuSecure.xcframework", targetDir)
 	}
 }

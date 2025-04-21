@@ -3,8 +3,7 @@ package adapter
 import (
 	"net/netip"
 
-	"github.com/sagernet/sing-dns"
-	"github.com/sagernet/sing/common/logger"
+	"github.com/konglong147/securefile/local/sing-dns"
 )
 
 type FakeIPStore interface {
@@ -17,13 +16,6 @@ type FakeIPStore interface {
 
 type FakeIPStorage interface {
 	FakeIPMetadata() *FakeIPMetadata
-	FakeIPSaveMetadata(metadata *FakeIPMetadata) error
-	FakeIPSaveMetadataAsync(metadata *FakeIPMetadata)
-	FakeIPStore(address netip.Addr, domain string) error
-	FakeIPStoreAsync(address netip.Addr, domain string, logger logger.Logger)
-	FakeIPLoad(address netip.Addr) (string, bool)
-	FakeIPLoadDomain(domain string, isIPv6 bool) (netip.Addr, bool)
-	FakeIPReset() error
 }
 
 type FakeIPTransport interface {

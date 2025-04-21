@@ -4,11 +4,11 @@ import (
 	"reflect"
 
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/domain"
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
-	"github.com/sagernet/sing/common/json"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/domain"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	F "github.com/konglong147/securefile/local/sing/common/format"
+	"github.com/konglong147/securefile/local/sing/common/json"
 
 	"go4.org/netipx"
 )
@@ -46,7 +46,7 @@ func (r *RuleSet) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 	if r.Tag == "" {
-		return E.New("missing tag")
+		return E.New("xiaoshidelixing tag")
 	}
 	var v any
 	switch r.Type {
@@ -63,7 +63,7 @@ func (r *RuleSet) UnmarshalJSON(bytes []byte) error {
 	if r.Type != C.RuleSetTypeInline {
 		switch r.Format {
 		case "":
-			return E.New("missing format")
+			return E.New("xiaoshidelixing format")
 		case C.RuleSetFormatSource, C.RuleSetFormatBinary:
 		default:
 			return E.New("unknown rule-set format: " + r.Format)
@@ -216,7 +216,7 @@ func (r *PlainRuleSetCompat) UnmarshalJSON(bytes []byte) error {
 	case C.RuleSetVersion1, C.RuleSetVersion2:
 		v = &r.Options
 	case 0:
-		return E.New("missing rule-set version")
+		return E.New("xiaoshidelixing rule-set version")
 	default:
 		return E.New("unknown rule-set version: ", r.Version)
 	}

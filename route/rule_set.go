@@ -4,24 +4,15 @@ import (
 	"context"
 
 	"github.com/konglong147/securefile/adapter"
-	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing/common"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/logger"
+	"github.com/konglong147/securefile/local/sing/common"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 
 	"go4.org/netipx"
 )
 
-func NewRuleSet(ctx context.Context, router adapter.Router, logger logger.ContextLogger, options option.RuleSet) (adapter.RuleSet, error) {
-	switch options.Type {
-	case C.RuleSetTypeInline, C.RuleSetTypeLocal, "":
-		return NewLocalRuleSet(ctx, router, logger, options)
-	case C.RuleSetTypeRemote:
-		return NewRemoteRuleSet(ctx, router, logger, options), nil
-	default:
-		return nil, E.New("unknown rule-set type: ", options.Type)
-	}
+func NewRuleSet(ctx context.Context, router adapter.Router, yousuocanshu option.RuleSet) (adapter.RuleSet, error) {
+	return nil, E.New("unknown rule-set type: ", yousuocanshu.Type)
 }
 
 func extractIPSetFromRule(rawRule adapter.HeadlessRule) []*netipx.IPSet {

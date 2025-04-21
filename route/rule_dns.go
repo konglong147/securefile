@@ -7,32 +7,31 @@ import (
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/experimental/deprecated"
-	"github.com/konglong147/securefile/log"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing/common"
-	E "github.com/sagernet/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 )
 
-func NewDNSRule(ctx context.Context, router adapter.Router, logger log.ContextLogger, options option.DNSRule, checkServer bool) (adapter.DNSRule, error) {
-	switch options.Type {
+func NewDNSRule(ctx context.Context, router adapter.Router, yousuocanshu option.DNSRule, checkServer bool) (adapter.DNSRule, error) {
+	switch yousuocanshu.Type {
 	case "", C.RuleTypeDefault:
-		if !options.DefaultOptions.IsValid() {
-			return nil, E.New("missing conditions")
+		if !yousuocanshu.DefaultOptions.IsValid() {
+			return nil, E.New("xiaoshidelixing conditions")
 		}
-		if options.DefaultOptions.Server == "" && checkServer {
-			return nil, E.New("missing server field")
+		if yousuocanshu.DefaultOptions.Server == "" && checkServer {
+			return nil, E.New("xiaoshidelixing server field")
 		}
-		return NewDefaultDNSRule(ctx, router, logger, options.DefaultOptions)
+		return NewDefaultDNSRule(ctx, router, yousuocanshu.DefaultOptions)
 	case C.RuleTypeLogical:
-		if !options.LogicalOptions.IsValid() {
-			return nil, E.New("missing conditions")
+		if !yousuocanshu.LogicalOptions.IsValid() {
+			return nil, E.New("xiaoshidelixing conditions")
 		}
-		if options.LogicalOptions.Server == "" && checkServer {
-			return nil, E.New("missing server field")
+		if yousuocanshu.LogicalOptions.Server == "" && checkServer {
+			return nil, E.New("xiaoshidelixing server field")
 		}
-		return NewLogicalDNSRule(ctx, router, logger, options.LogicalOptions)
+		return NewLogicalDNSRule(ctx, router, yousuocanshu.LogicalOptions)
 	default:
-		return nil, E.New("unknown rule type: ", options.Type)
+		return nil, E.New("unknown rule type: ", yousuocanshu.Type)
 	}
 }
 
@@ -45,200 +44,200 @@ type DefaultDNSRule struct {
 	clientSubnet *netip.Prefix
 }
 
-func NewDefaultDNSRule(ctx context.Context, router adapter.Router, logger log.ContextLogger, options option.DefaultDNSRule) (*DefaultDNSRule, error) {
+func NewDefaultDNSRule(ctx context.Context, router adapter.Router, yousuocanshu option.DefaultDNSRule) (*DefaultDNSRule, error) {
 	rule := &DefaultDNSRule{
 		abstractDefaultRule: abstractDefaultRule{
-			invert:   options.Invert,
-			outbound: options.Server,
+			invert:   yousuocanshu.Invert,
+			outbound: yousuocanshu.Server,
 		},
-		disableCache: options.DisableCache,
-		rewriteTTL:   options.RewriteTTL,
-		clientSubnet: (*netip.Prefix)(options.ClientSubnet),
+		disableCache: yousuocanshu.DisableCache,
+		rewriteTTL:   yousuocanshu.RewriteTTL,
+		clientSubnet: (*netip.Prefix)(yousuocanshu.ClientSubnet),
 	}
-	if len(options.Inbound) > 0 {
-		item := NewInboundRule(options.Inbound)
+	if len(yousuocanshu.Inbound) > 0 {
+		item := NewInboundRule(yousuocanshu.Inbound)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if options.IPVersion > 0 {
-		switch options.IPVersion {
+	if yousuocanshu.IPVersion > 0 {
+		switch yousuocanshu.IPVersion {
 		case 4, 6:
-			item := NewIPVersionItem(options.IPVersion == 6)
+			item := NewIPVersionItem(yousuocanshu.IPVersion == 6)
 			rule.items = append(rule.items, item)
 			rule.allItems = append(rule.allItems, item)
 		default:
-			return nil, E.New("invalid ip version: ", options.IPVersion)
+			return nil, E.New("invalid ip version: ", yousuocanshu.IPVersion)
 		}
 	}
-	if len(options.QueryType) > 0 {
-		item := NewQueryTypeItem(options.QueryType)
+	if len(yousuocanshu.QueryType) > 0 {
+		item := NewQuntiShijinLeixing(yousuocanshu.QueryType)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.Network) > 0 {
-		item := NewNetworkItem(options.Network)
+	if len(yousuocanshu.Network) > 0 {
+		item := NewGongzuoMeisats(yousuocanshu.Network)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.AuthUser) > 0 {
-		item := NewAuthUserItem(options.AuthUser)
+	if len(yousuocanshu.AuthUser) > 0 {
+		item := NewAuthYonghumetise(yousuocanshu.AuthUser)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.Protocol) > 0 {
-		item := NewProtocolItem(options.Protocol)
+	if len(yousuocanshu.Protocol) > 0 {
+		item := NewXieyiLiseab(yousuocanshu.Protocol)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.Domain) > 0 || len(options.DomainSuffix) > 0 {
-		item := NewDomainItem(options.Domain, options.DomainSuffix)
+	if len(yousuocanshu.Domain) > 0 || len(yousuocanshu.DomainSuffix) > 0 {
+		item := NewDomainItem(yousuocanshu.Domain, yousuocanshu.DomainSuffix)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.DomainKeyword) > 0 {
-		item := NewDomainKeywordItem(options.DomainKeyword)
+	if len(yousuocanshu.DomainKeyword) > 0 {
+		item := NewDomainKeywordItem(yousuocanshu.DomainKeyword)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.DomainRegex) > 0 {
-		item, err := NewDomainRegexItem(options.DomainRegex)
+	if len(yousuocanshu.DomainRegex) > 0 {
+		item, err := NewDomainRegexItem(yousuocanshu.DomainRegex)
 		if err != nil {
 			return nil, E.Cause(err, "domain_regex")
 		}
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.Geosite) > 0 {
-		item := NewGeositeItem(router, logger, options.Geosite)
+	if len(yousuocanshu.Geosite) > 0 {
+		item := NewNaliZuoxiaozmose(router, yousuocanshu.Geosite)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.SourceGeoIP) > 0 {
-		item := NewGeoIPItem(router, logger, true, options.SourceGeoIP)
+	if len(yousuocanshu.SourceGeoIP) > 0 {
+		item := NewMeisozeDizhiTMes(router, true, yousuocanshu.SourceGeoIP)
 		rule.sourceAddressItems = append(rule.sourceAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.GeoIP) > 0 {
-		item := NewGeoIPItem(router, logger, false, options.GeoIP)
+	if len(yousuocanshu.GeoIP) > 0 {
+		item := NewMeisozeDizhiTMes(router, false, yousuocanshu.GeoIP)
 		rule.destinationIPCIDRItems = append(rule.destinationIPCIDRItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.SourceIPCIDR) > 0 {
-		item, err := NewIPCIDRItem(true, options.SourceIPCIDR)
+	if len(yousuocanshu.SourceIPCIDR) > 0 {
+		item, err := NewIPCIDRItem(true, yousuocanshu.SourceIPCIDR)
 		if err != nil {
 			return nil, E.Cause(err, "source_ip_cidr")
 		}
 		rule.sourceAddressItems = append(rule.sourceAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.IPCIDR) > 0 {
-		item, err := NewIPCIDRItem(false, options.IPCIDR)
+	if len(yousuocanshu.IPCIDR) > 0 {
+		item, err := NewIPCIDRItem(false, yousuocanshu.IPCIDR)
 		if err != nil {
 			return nil, E.Cause(err, "ip_cidr")
 		}
 		rule.destinationIPCIDRItems = append(rule.destinationIPCIDRItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if options.SourceIPIsPrivate {
+	if yousuocanshu.SourceIPIsPrivate {
 		item := NewIPIsPrivateItem(true)
 		rule.sourceAddressItems = append(rule.sourceAddressItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if options.IPIsPrivate {
+	if yousuocanshu.IPIsPrivate {
 		item := NewIPIsPrivateItem(false)
 		rule.destinationIPCIDRItems = append(rule.destinationIPCIDRItems, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.SourcePort) > 0 {
-		item := NewPortItem(true, options.SourcePort)
-		rule.sourcePortItems = append(rule.sourcePortItems, item)
+	if len(yousuocanshu.SourcePort) > 0 {
+		item := NewJiekouMetise(true, yousuocanshu.SourcePort)
+		rule.sourceJiekouMetises = append(rule.sourceJiekouMetises, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.SourcePortRange) > 0 {
-		item, err := NewPortRangeItem(true, options.SourcePortRange)
+	if len(yousuocanshu.SourcePortRange) > 0 {
+		item, err := NewPortRangeItem(true, yousuocanshu.SourcePortRange)
 		if err != nil {
 			return nil, E.Cause(err, "source_port_range")
 		}
-		rule.sourcePortItems = append(rule.sourcePortItems, item)
+		rule.sourceJiekouMetises = append(rule.sourceJiekouMetises, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.Port) > 0 {
-		item := NewPortItem(false, options.Port)
-		rule.destinationPortItems = append(rule.destinationPortItems, item)
+	if len(yousuocanshu.Port) > 0 {
+		item := NewJiekouMetise(false, yousuocanshu.Port)
+		rule.destinationJiekouMetises = append(rule.destinationJiekouMetises, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.PortRange) > 0 {
-		item, err := NewPortRangeItem(false, options.PortRange)
+	if len(yousuocanshu.PortRange) > 0 {
+		item, err := NewPortRangeItem(false, yousuocanshu.PortRange)
 		if err != nil {
 			return nil, E.Cause(err, "port_range")
 		}
-		rule.destinationPortItems = append(rule.destinationPortItems, item)
+		rule.destinationJiekouMetises = append(rule.destinationJiekouMetises, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.ProcessName) > 0 {
-		item := NewProcessItem(options.ProcessName)
+	if len(yousuocanshu.ProcessName) > 0 {
+		item := NewTongdapnewsaeta(yousuocanshu.ProcessName)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.ProcessPath) > 0 {
-		item := NewProcessPathItem(options.ProcessPath)
+	if len(yousuocanshu.ProcessPath) > 0 {
+		item := NewBuelseCesspagetse(yousuocanshu.ProcessPath)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.ProcessPathRegex) > 0 {
-		item, err := NewProcessPathRegexItem(options.ProcessPathRegex)
+	if len(yousuocanshu.ProcessPathRegex) > 0 {
+		item, err := NewdizhibuxngGeisheizhi(yousuocanshu.ProcessPathRegex)
 		if err != nil {
 			return nil, E.Cause(err, "process_path_regex")
 		}
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.PackageName) > 0 {
-		item := NewPackageNameItem(options.PackageName)
+	if len(yousuocanshu.PackageName) > 0 {
+		item := NewZhizhangMingmites(yousuocanshu.PackageName)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.User) > 0 {
-		item := NewUserItem(options.User)
+	if len(yousuocanshu.User) > 0 {
+		item := NewYonghumetise(yousuocanshu.User)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.UserID) > 0 {
-		item := NewUserIDItem(options.UserID)
+	if len(yousuocanshu.UserID) > 0 {
+		item := NewUserIDItem(yousuocanshu.UserID)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.Outbound) > 0 {
-		item := NewOutboundRule(options.Outbound)
+	if len(yousuocanshu.Outbound) > 0 {
+		item := NewOutboundRule(yousuocanshu.Outbound)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if options.ClashMode != "" {
-		item := NewClashModeItem(router, options.ClashMode)
+	if yousuocanshu.ClashMode != "" {
+		item := NewClashModeItem(router, yousuocanshu.ClashMode)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.WIFISSID) > 0 {
-		item := NewWIFISSIDItem(router, options.WIFISSID)
+	if len(yousuocanshu.WIFISSID) > 0 {
+		item := XindeluxianWanl(router, yousuocanshu.WIFISSID)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.WIFIBSSID) > 0 {
-		item := NewWIFIBSSIDItem(router, options.WIFIBSSID)
+	if len(yousuocanshu.WIFIBSSID) > 0 {
+		item := NewXinWangGoBaqpe(router, yousuocanshu.WIFIBSSID)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
-	if len(options.RuleSet) > 0 {
+	if len(yousuocanshu.RuleSet) > 0 {
 		var matchSource bool
-		if options.RuleSetIPCIDRMatchSource {
+		if yousuocanshu.RuleSetIPCIDRMatchSource {
 			matchSource = true
 		} else
 		//nolint:staticcheck
-		if options.Deprecated_RulesetIPCIDRMatchSource {
+		if yousuocanshu.Deprecated_RulesetIPCIDRMatchSource {
 			matchSource = true
 			deprecated.Report(ctx, deprecated.OptionBadMatchSource)
 		}
-		item := NewRuleSetItem(router, options.RuleSet, matchSource, options.RuleSetIPCIDRAcceptEmpty)
+		item := NewGuizeSheizhimest(router, yousuocanshu.RuleSet, matchSource, yousuocanshu.RuleSetIPCIDRAcceptEmpty)
 		rule.items = append(rule.items, item)
 		rule.allItems = append(rule.allItems, item)
 	}
@@ -262,7 +261,7 @@ func (r *DefaultDNSRule) WithAddressLimit() bool {
 		return true
 	}
 	for _, rawRule := range r.items {
-		ruleSet, isRuleSet := rawRule.(*RuleSetItem)
+		ruleSet, isRuleSet := rawRule.(*GuizeSheizhimest)
 		if !isRuleSet {
 			continue
 		}
@@ -294,27 +293,27 @@ type LogicalDNSRule struct {
 	clientSubnet *netip.Prefix
 }
 
-func NewLogicalDNSRule(ctx context.Context, router adapter.Router, logger log.ContextLogger, options option.LogicalDNSRule) (*LogicalDNSRule, error) {
+func NewLogicalDNSRule(ctx context.Context, router adapter.Router, yousuocanshu option.LogicalDNSRule) (*LogicalDNSRule, error) {
 	r := &LogicalDNSRule{
 		abstractLogicalRule: abstractLogicalRule{
-			rules:    make([]adapter.HeadlessRule, len(options.Rules)),
-			invert:   options.Invert,
-			outbound: options.Server,
+			rules:    make([]adapter.HeadlessRule, len(yousuocanshu.Rules)),
+			invert:   yousuocanshu.Invert,
+			outbound: yousuocanshu.Server,
 		},
-		disableCache: options.DisableCache,
-		rewriteTTL:   options.RewriteTTL,
-		clientSubnet: (*netip.Prefix)(options.ClientSubnet),
+		disableCache: yousuocanshu.DisableCache,
+		rewriteTTL:   yousuocanshu.RewriteTTL,
+		clientSubnet: (*netip.Prefix)(yousuocanshu.ClientSubnet),
 	}
-	switch options.Mode {
+	switch yousuocanshu.Mode {
 	case C.LogicalTypeAnd:
 		r.mode = C.LogicalTypeAnd
 	case C.LogicalTypeOr:
 		r.mode = C.LogicalTypeOr
 	default:
-		return nil, E.New("unknown logical mode: ", options.Mode)
+		return nil, E.New("unknown logical mode: ", yousuocanshu.Mode)
 	}
-	for i, subRule := range options.Rules {
-		rule, err := NewDNSRule(ctx, router, logger, subRule, false)
+	for i, subRule := range yousuocanshu.Rules {
+		rule, err := NewDNSRule(ctx, router, subRule, false)
 		if err != nil {
 			return nil, E.Cause(err, "sub rule[", i, "]")
 		}

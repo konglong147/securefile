@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/sagernet/sing/common/random"
+	"github.com/konglong147/securefile/local/sing/common/random"
 )
 
 func init() {
@@ -24,9 +24,4 @@ func ContextWithNewID(ctx context.Context) context.Context {
 		ID:        rand.Uint32(),
 		CreatedAt: time.Now(),
 	})
-}
-
-func IDFromContext(ctx context.Context) (ID, bool) {
-	id, loaded := ctx.Value((*idKey)(nil)).(ID)
-	return id, loaded
 }

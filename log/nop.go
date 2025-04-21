@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/sagernet/sing/common/observable"
+	"github.com/konglong147/securefile/local/sing/common/observable"
 )
 
 var _ ObservableFactory = (*nopFactory)(nil)

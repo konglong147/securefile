@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
 var _ RuleItem = (*DomainRegexItem)(nil)

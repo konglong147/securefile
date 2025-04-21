@@ -2,8 +2,8 @@ package build_shared
 
 import (
 	"github.com/konglong147/securefile/common/badversion"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/shell"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/shell"
 )
 
 func ReadTag() (string, error) {

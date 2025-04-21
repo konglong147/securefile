@@ -6,17 +6,17 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common"
-	F "github.com/sagernet/sing/common/format"
+	"github.com/konglong147/securefile/local/sing/common"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
 type abstractDefaultRule struct {
 	items                   []RuleItem
 	sourceAddressItems      []RuleItem
-	sourcePortItems         []RuleItem
+	sourceJiekouMetises         []RuleItem
 	destinationAddressItems []RuleItem
 	destinationIPCIDRItems  []RuleItem
-	destinationPortItems    []RuleItem
+	destinationJiekouMetises    []RuleItem
 	allItems                []RuleItem
 	ruleSetItem             RuleItem
 	invert                  bool
@@ -53,7 +53,7 @@ func (r *abstractDefaultRule) Close() error {
 
 func (r *abstractDefaultRule) UpdateGeosite() error {
 	for _, item := range r.allItems {
-		if geositeItem, isSite := item.(*GeositeItem); isSite {
+		if geositeItem, isSite := item.(*NaliZuoxiaozmose); isSite {
 			err := geositeItem.Update()
 			if err != nil {
 				return err
@@ -78,9 +78,9 @@ func (r *abstractDefaultRule) Match(metadata *adapter.InboundContext) bool {
 		}
 	}
 
-	if len(r.sourcePortItems) > 0 && !metadata.SourcePortMatch {
+	if len(r.sourceJiekouMetises) > 0 && !metadata.SourcePortMatch {
 		metadata.DidMatch = true
-		for _, item := range r.sourcePortItems {
+		for _, item := range r.sourceJiekouMetises {
 			if item.Match(metadata) {
 				metadata.SourcePortMatch = true
 				break
@@ -108,9 +108,9 @@ func (r *abstractDefaultRule) Match(metadata *adapter.InboundContext) bool {
 		}
 	}
 
-	if len(r.destinationPortItems) > 0 && !metadata.DestinationPortMatch {
+	if len(r.destinationJiekouMetises) > 0 && !metadata.DestinationPortMatch {
 		metadata.DidMatch = true
-		for _, item := range r.destinationPortItems {
+		for _, item := range r.destinationJiekouMetises {
 			if item.Match(metadata) {
 				metadata.DestinationPortMatch = true
 				break
@@ -119,7 +119,7 @@ func (r *abstractDefaultRule) Match(metadata *adapter.InboundContext) bool {
 	}
 
 	for _, item := range r.items {
-		if _, isRuleSet := item.(*RuleSetItem); !isRuleSet {
+		if _, isRuleSet := item.(*GuizeSheizhimest); !isRuleSet {
 			metadata.DidMatch = true
 		}
 		if !item.Match(metadata) {
@@ -131,7 +131,7 @@ func (r *abstractDefaultRule) Match(metadata *adapter.InboundContext) bool {
 		return r.invert
 	}
 
-	if len(r.sourcePortItems) > 0 && !metadata.SourcePortMatch {
+	if len(r.sourceJiekouMetises) > 0 && !metadata.SourcePortMatch {
 		return r.invert
 	}
 
@@ -139,7 +139,7 @@ func (r *abstractDefaultRule) Match(metadata *adapter.InboundContext) bool {
 		return r.invert
 	}
 
-	if len(r.destinationPortItems) > 0 && !metadata.DestinationPortMatch {
+	if len(r.destinationJiekouMetises) > 0 && !metadata.DestinationPortMatch {
 		return r.invert
 	}
 

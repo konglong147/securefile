@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"sort"
 
-	"github.com/sagernet/sing/common/varbin"
+	"github.com/konglong147/securefile/local/sing/common/varbin"
 )
 
 func Write(writer varbin.Writer, domains map[string][]Item) error {

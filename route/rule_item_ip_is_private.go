@@ -4,7 +4,7 @@ import (
 	"net/netip"
 
 	"github.com/konglong147/securefile/adapter"
-	N "github.com/sagernet/sing/common/network"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 var _ RuleItem = (*IPIsPrivateItem)(nil)

@@ -11,10 +11,10 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/sagernet/sing/common/buf"
-	E "github.com/sagernet/sing/common/exceptions"
-	N "github.com/sagernet/sing/common/network"
-	"github.com/sagernet/sing/common/tls"
+	"github.com/konglong147/securefile/local/sing/common/buf"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	N "github.com/konglong147/securefile/local/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common/tls"
 )
 
 var _ N.ReadWaiter = (*ReadWaitConn)(nil)
@@ -25,7 +25,7 @@ type ReadWaitConn struct {
 	rawInput                      *bytes.Buffer
 	input                         *bytes.Reader
 	hand                          *bytes.Buffer
-	readWaitOptions               N.ReadWaitOptions
+	dudongwodeshuju               N.ReadWaitOptions
 	tlsReadRecord                 func() error
 	tlsHandlePostHandshakeMessage func() error
 }
@@ -81,8 +81,8 @@ func NewReadWaitConn(conn tls.Conn) (tls.Conn, error) {
 	}, nil
 }
 
-func (c *ReadWaitConn) InitializeReadWaiter(options N.ReadWaitOptions) (needCopy bool) {
-	c.readWaitOptions = options
+func (c *ReadWaitConn) InitializeReadWaiter(yousuocanshu N.ReadWaitOptions) (needCopy bool) {
+	c.dudongwodeshuju = yousuocanshu
 	return false
 }
 
@@ -105,7 +105,7 @@ func (c *ReadWaitConn) WaitReadBuffer() (buffer *buf.Buffer, err error) {
 			}
 		}
 	}
-	buffer = c.readWaitOptions.NewBuffer()
+	buffer = c.dudongwodeshuju.NewBuffer()
 	n, err := c.input.Read(buffer.FreeBytes())
 	if err != nil {
 		buffer.Release()
@@ -120,7 +120,7 @@ func (c *ReadWaitConn) WaitReadBuffer() (buffer *buf.Buffer, err error) {
 		// return n, err // will be io.EOF on closeNotify
 	}
 
-	c.readWaitOptions.PostReturn(buffer)
+	c.dudongwodeshuju.PostReturn(buffer)
 	return
 }
 

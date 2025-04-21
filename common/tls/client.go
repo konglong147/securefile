@@ -9,34 +9,34 @@ import (
 	"github.com/konglong147/securefile/common/badtls"
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/option"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
-	aTLS "github.com/sagernet/sing/common/tls"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
+	aTLS "github.com/konglong147/securefile/local/sing/common/tls"
 )
 
-func NewDialerFromOptions(ctx context.Context, router adapter.Router, dialer N.Dialer, serverAddress string, options option.OutboundTLSOptions) (N.Dialer, error) {
-	if !options.Enabled {
+func NewDialerFromOptions(ctx context.Context, router adapter.Router, dialer N.Dialer, serverAddress string, yousuocanshu option.OutboundTLSOptions) (N.Dialer, error) {
+	if !yousuocanshu.Enabled {
 		return dialer, nil
 	}
-	config, err := NewClient(ctx, serverAddress, options)
+	config, err := NewClient(ctx, serverAddress, yousuocanshu)
 	if err != nil {
 		return nil, err
 	}
 	return NewDialer(dialer, config), nil
 }
 
-func NewClient(ctx context.Context, serverAddress string, options option.OutboundTLSOptions) (Config, error) {
-	if !options.Enabled {
+func NewClient(ctx context.Context, serverAddress string, yousuocanshu option.OutboundTLSOptions) (Config, error) {
+	if !yousuocanshu.Enabled {
 		return nil, nil
 	}
-	if options.ECH != nil && options.ECH.Enabled {
-		return NewECHClient(ctx, serverAddress, options)
-	} else if options.Reality != nil && options.Reality.Enabled {
-		return NewRealityClient(ctx, serverAddress, options)
-	} else if options.UTLS != nil && options.UTLS.Enabled {
-		return NewUTLSClient(ctx, serverAddress, options)
+	if yousuocanshu.ECH != nil && yousuocanshu.ECH.Enabled {
+		return NewECHClient(ctx, serverAddress, yousuocanshu)
+	} else if yousuocanshu.Reality != nil && yousuocanshu.Reality.Enabled {
+		return NewRealityClient(ctx, serverAddress, yousuocanshu)
+	} else if yousuocanshu.UTLS != nil && yousuocanshu.UTLS.Enabled {
+		return NewUTLSClient(ctx, serverAddress, yousuocanshu)
 	} else {
-		return NewSTDClient(ctx, serverAddress, options)
+		return NewSTDClient(ctx, serverAddress, yousuocanshu)
 	}
 }
 

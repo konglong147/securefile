@@ -7,45 +7,34 @@ import (
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/log"
 	"github.com/konglong147/securefile/option"
-	E "github.com/sagernet/sing/common/exceptions"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 )
 
-func New(ctx context.Context, router adapter.Router, logger log.ContextLogger, tag string, options option.Outbound) (adapter.Outbound, error) {
+func New(ctx context.Context, router adapter.Router, tag string, yousuocanshu option.Outbound) (adapter.Outbound, error) {
+	logFactory, _ := log.New(log.Options{
+	})
+	logger := logFactory.NewLogger("")
 	if tag != "" {
 		ctx = adapter.WithContext(ctx, &adapter.InboundContext{
 			Outbound: tag,
 		})
 	}
-	if options.Type == "" {
-		return nil, E.New("missing outbound type")
+	if yousuocanshu.Type == "" {
+		return nil, E.New("xiaoshidelixing type")
 	}
 	ctx = ContextWithTag(ctx, tag)
-	switch options.Type {
+	switch yousuocanshu.Type {
 	case C.TypeDirect:
-		return NewDirect(router, logger, tag, options.DirectOptions)
+		return NewDirect(router,tag, yousuocanshu.DirectOptions)
 	case C.TypeBlock:
-		return NewBlock(logger, tag), nil
+		return NewBlock(tag), nil
 	case C.TypeDNS:
 		return NewDNS(router, tag), nil
-	case C.TypeSOCKS:
-		return NewSocks(router, logger, tag, options.SocksOptions)
-	case C.TypeHTTP:
-		return NewHTTP(ctx, router, logger, tag, options.HTTPOptions)
 	case C.TypeVMess:
-		return NewVMess(ctx, router, logger, tag, options.VMessOptions)
-	case C.TypeTor:
-		return NewTor(ctx, router, logger, tag, options.TorOptions)
-	case C.TypeSSH:
-		return NewSSH(ctx, router, logger, tag, options.SSHOptions)
+		return NewVMess(ctx, router,logger, tag, yousuocanshu.VMessOptions)
 	case C.TypeVLESS:
-		return NewVLESS(ctx, router, logger, tag, options.VLESSOptions)
-	case C.TypeTUIC:
-		return NewTUIC(ctx, router, logger, tag, options.TUICOptions)
-	case C.TypeSelector:
-		return NewSelector(ctx, router, logger, tag, options.SelectorOptions)
-	case C.TypeURLTest:
-		return NewURLTest(ctx, router, logger, tag, options.URLTestOptions)
+		return NewVLESS(ctx, router, logger, tag, yousuocanshu.VLESSOptions)
 	default:
-		return nil, E.New("unknown outbound type: ", options.Type)
+		return nil, E.New("unknown outbound type: ", yousuocanshu.Type)
 	}
 }

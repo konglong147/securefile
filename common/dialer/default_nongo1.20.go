@@ -5,7 +5,7 @@ package dialer
 import (
 	"net"
 
-	E "github.com/sagernet/sing/common/exceptions"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 )
 
 type tcpDialer = net.Dialer

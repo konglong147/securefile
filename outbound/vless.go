@@ -11,14 +11,13 @@ import (
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/log"
 	"github.com/konglong147/securefile/option"
-	"github.com/konglong147/securefile/transport/v2ray"
-	"github.com/sagernet/sing-vmess/packetaddr"
-	"github.com/sagernet/sing-vmess/vless"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/bufio"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing-vmess/packetaddr"
+	"github.com/konglong147/securefile/local/sing-vmess/vless"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/bufio"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 var _ adapter.Outbound = (*VLESS)(nil)
@@ -35,53 +34,46 @@ type VLESS struct {
 	xudp            bool
 }
 
-func NewVLESS(ctx context.Context, router adapter.Router, logger log.ContextLogger, tag string, options option.VLESSOutboundOptions) (*VLESS, error) {
-	outboundDialer, err := dialer.New(router, options.DialerOptions)
+func NewVLESS(ctx context.Context, router adapter.Router, logger log.ContextLogger, tag string, yousuocanshu option.VLESSOutboundOptions) (*VLESS, error) {
+	outboundDialer, err := dialer.New(router, yousuocanshu.DialerOptions)
 	if err != nil {
 		return nil, err
 	}
 	outbound := &VLESS{
 		myOutboundAdapter: myOutboundAdapter{
 			protocol:     C.TypeVLESS,
-			network:      options.Network.Build(),
+			network:      yousuocanshu.Network.Build(),
 			router:       router,
-			logger:       logger,
 			tag:          tag,
-			dependencies: withDialerDependency(options.DialerOptions),
+			dependencies: withDialerDependency(yousuocanshu.DialerOptions),
 		},
 		dialer:     outboundDialer,
-		serverAddr: options.ServerOptions.Build(),
+		serverAddr: yousuocanshu.ServerOptions.Build(),
 	}
-	if options.TLS != nil {
-		outbound.tlsConfig, err = tls.NewClient(ctx, options.Server, common.PtrValueOrDefault(options.TLS))
+	if yousuocanshu.TLS != nil {
+		outbound.tlsConfig, err = tls.NewClient(ctx, yousuocanshu.Server, common.PtrValueOrDefault(yousuocanshu.TLS))
 		if err != nil {
 			return nil, err
 		}
 	}
-	if options.Transport != nil {
-		outbound.transport, err = v2ray.NewClientTransport(ctx, outbound.dialer, outbound.serverAddr, common.PtrValueOrDefault(options.Transport), outbound.tlsConfig)
-		if err != nil {
-			return nil, E.Cause(err, "create client transport: ", options.Transport.Type)
-		}
-	}
-	if options.PacketEncoding == nil {
+	if yousuocanshu.PacketEncoding == nil {
 		outbound.xudp = true
 	} else {
-		switch *options.PacketEncoding {
+		switch *yousuocanshu.PacketEncoding {
 		case "":
 		case "packetaddr":
 			outbound.packetAddr = true
 		case "xudp":
 			outbound.xudp = true
 		default:
-			return nil, E.New("unknown packet encoding: ", options.PacketEncoding)
+			return nil, E.New("unknown packet encoding: ", yousuocanshu.PacketEncoding)
 		}
 	}
-	outbound.client, err = vless.NewClient(options.UUID, options.Flow, logger)
+	outbound.client, err = vless.NewClient(yousuocanshu.UUID, yousuocanshu.Flow, logger)
 	if err != nil {
 		return nil, err
 	}
-	outbound.multiplexDialer, err = mux.NewClientWithOptions((*vlessDialer)(outbound), logger, common.PtrValueOrDefault(options.Multiplex))
+	outbound.multiplexDialer, err = mux.NewClientWithOptions((*vlessDialer)(outbound), logger, common.PtrValueOrDefault(yousuocanshu.Multiplex))
 	if err != nil {
 		return nil, err
 	}
@@ -90,30 +82,16 @@ func NewVLESS(ctx context.Context, router adapter.Router, logger log.ContextLogg
 
 func (h *VLESS) DialContext(ctx context.Context, network string, destination M.Socksaddr) (net.Conn, error) {
 	if h.multiplexDialer == nil {
-		switch N.NetworkName(network) {
-		case N.NetworkTCP:
-			h.logger.InfoContext(ctx, "outbound connection to ", destination)
-		case N.NetworkUDP:
-			h.logger.InfoContext(ctx, "outbound packet connection to ", destination)
-		}
 		return (*vlessDialer)(h).DialContext(ctx, network, destination)
 	} else {
-		switch N.NetworkName(network) {
-		case N.NetworkTCP:
-			h.logger.InfoContext(ctx, "outbound multiplex connection to ", destination)
-		case N.NetworkUDP:
-			h.logger.InfoContext(ctx, "outbound multiplex packet connection to ", destination)
-		}
 		return h.multiplexDialer.DialContext(ctx, network, destination)
 	}
 }
 
 func (h *VLESS) ListenPacket(ctx context.Context, destination M.Socksaddr) (net.PacketConn, error) {
 	if h.multiplexDialer == nil {
-		h.logger.InfoContext(ctx, "outbound packet connection to ", destination)
 		return (*vlessDialer)(h).ListenPacket(ctx, destination)
 	} else {
-		h.logger.InfoContext(ctx, "outbound multiplex packet connection to ", destination)
 		return h.multiplexDialer.ListenPacket(ctx, destination)
 	}
 }
@@ -161,10 +139,8 @@ func (h *vlessDialer) DialContext(ctx context.Context, network string, destinati
 	}
 	switch N.NetworkName(network) {
 	case N.NetworkTCP:
-		h.logger.InfoContext(ctx, "outbound connection to ", destination)
 		return h.client.DialEarlyConn(conn, destination)
 	case N.NetworkUDP:
-		h.logger.InfoContext(ctx, "outbound packet connection to ", destination)
 		if h.xudp {
 			return h.client.DialEarlyXUDPPacketConn(conn, destination)
 		} else if h.packetAddr {
@@ -185,7 +161,6 @@ func (h *vlessDialer) DialContext(ctx context.Context, network string, destinati
 }
 
 func (h *vlessDialer) ListenPacket(ctx context.Context, destination M.Socksaddr) (net.PacketConn, error) {
-	h.logger.InfoContext(ctx, "outbound packet connection to ", destination)
 	ctx, metadata := adapter.ExtendContext(ctx)
 	metadata.Outbound = h.tag
 	metadata.Destination = destination

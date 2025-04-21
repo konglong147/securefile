@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sagernet/sing-dns"
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
-	"github.com/sagernet/sing/common/json"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing-dns"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	F "github.com/konglong147/securefile/local/sing/common/format"
+	"github.com/konglong147/securefile/local/sing/common/json"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 
 	mDNS "github.com/miekg/dns"
 )

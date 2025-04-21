@@ -3,7 +3,7 @@ package deprecated
 import (
 	"context"
 
-	"github.com/sagernet/sing/service"
+	"github.com/konglong147/securefile/local/sing/service"
 )
 
 type Manager interface {

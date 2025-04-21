@@ -10,11 +10,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/bufio"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/bufio"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 
 	"github.com/metacubex/tfo-go"
 )

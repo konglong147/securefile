@@ -5,7 +5,6 @@ import (
 	"net"
 	"net/netip"
 	"os"
-	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -17,13 +16,13 @@ import (
 	"github.com/konglong147/securefile/experimental/libbox/platform"
 	"github.com/konglong147/securefile/log"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing-tun"
-	"github.com/sagernet/sing/common"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
-	"github.com/sagernet/sing/common/ranges"
-	"github.com/sagernet/sing/common/x/list"
+	"github.com/konglong147/securefile/local/sing-tun"
+	"github.com/konglong147/securefile/local/sing/common"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common/ranges"
+	"github.com/konglong147/securefile/local/sing/common/x/list"
 
 	"go4.org/netipx"
 )
@@ -35,15 +34,15 @@ type Tun struct {
 	ctx                         context.Context
 	router                      adapter.Router
 	logger                      log.ContextLogger
-	inboundOptions              option.InboundOptions
-	tunOptions                  tun.Options
+	limiandeshuJuse              option.InboundOptions
+	xuanTheopts                  tun.Options
 	endpointIndependentNat      bool
 	udpTimeout                  int64
 	stack                       string
 	tunIf                       tun.Tun
 	tunStack                    tun.Stack
-	platformInterface           platform.Interface
-	platformOptions             option.TunPlatformOptions
+	taipingMianlian           platform.LuowangLian
+	platformOptions             option.TaipingForShuju
 	autoRedirect                tun.AutoRedirect
 	routeRuleSet                []adapter.RuleSet
 	routeRuleSetCallback        []*list.Element[adapter.RuleSetUpdateCallback]
@@ -53,111 +52,79 @@ type Tun struct {
 	routeExcludeAddressSet      []*netipx.IPSet
 }
 
-func NewTun(ctx context.Context, router adapter.Router, logger log.ContextLogger, tag string, options option.TunInboundOptions, platformInterface platform.Interface) (*Tun, error) {
-	address := options.Address
-	var deprecatedAddressUsed bool
-	//nolint:staticcheck
-	//goland:noinspection GoDeprecation
-	if len(options.Inet4Address) > 0 {
-		address = append(address, options.Inet4Address...)
-		deprecatedAddressUsed = true
+func NewTun(ctx context.Context, router adapter.Router, logger log.ContextLogger, tag string, yousuocanshu option.TunInboundOptions, taipingMianlian platform.LuowangLian) (*Tun, error) {
+	address := yousuocanshu.Address
+	var snoadddsllkerxewa bool
+	if len(yousuocanshu.Inet4Address) > 0 {
+		address = append(address, yousuocanshu.Inet4Address...)
+		snoadddsllkerxewa = true
 	}
-	//nolint:staticcheck
-	//goland:noinspection GoDeprecation
-	if len(options.Inet6Address) > 0 {
-		address = append(address, options.Inet6Address...)
-		deprecatedAddressUsed = true
-	}
-	inet4Address := common.Filter(address, func(it netip.Prefix) bool {
+	ssloiiiunse4 := common.Filter(address, func(it netip.Prefix) bool {
 		return it.Addr().Is4()
 	})
-	inet6Address := common.Filter(address, func(it netip.Prefix) bool {
-		return it.Addr().Is6()
-	})
+	
+	routeAddress := yousuocanshu.RouteAddress
 
-	routeAddress := options.RouteAddress
-	//nolint:staticcheck
-	//goland:noinspection GoDeprecation
-	if len(options.Inet4RouteAddress) > 0 {
-		routeAddress = append(routeAddress, options.Inet4RouteAddress...)
-		deprecatedAddressUsed = true
-	}
-	//nolint:staticcheck
-	//goland:noinspection GoDeprecation
-	if len(options.Inet6RouteAddress) > 0 {
-		routeAddress = append(routeAddress, options.Inet6RouteAddress...)
-		deprecatedAddressUsed = true
+	if len(yousuocanshu.Inet4RouteAddress) > 0 {
+		routeAddress = append(routeAddress, yousuocanshu.Inet4RouteAddress...)
+		snoadddsllkerxewa = true
 	}
 	inet4RouteAddress := common.Filter(routeAddress, func(it netip.Prefix) bool {
 		return it.Addr().Is4()
 	})
-	inet6RouteAddress := common.Filter(routeAddress, func(it netip.Prefix) bool {
-		return it.Addr().Is6()
-	})
+	routeExcludeAddress := yousuocanshu.RouteExcludeAddress
 
-	routeExcludeAddress := options.RouteExcludeAddress
-	//nolint:staticcheck
-	//goland:noinspection GoDeprecation
-	if len(options.Inet4RouteExcludeAddress) > 0 {
-		routeExcludeAddress = append(routeExcludeAddress, options.Inet4RouteExcludeAddress...)
-		deprecatedAddressUsed = true
-	}
-	//nolint:staticcheck
-	//goland:noinspection GoDeprecation
-	if len(options.Inet6RouteExcludeAddress) > 0 {
-		routeExcludeAddress = append(routeExcludeAddress, options.Inet6RouteExcludeAddress...)
-		deprecatedAddressUsed = true
+	if len(yousuocanshu.Inet4RouteExcludeAddress) > 0 {
+		routeExcludeAddress = append(routeExcludeAddress, yousuocanshu.Inet4RouteExcludeAddress...)
+		snoadddsllkerxewa = true
 	}
 	inet4RouteExcludeAddress := common.Filter(routeExcludeAddress, func(it netip.Prefix) bool {
 		return it.Addr().Is4()
 	})
-	inet6RouteExcludeAddress := common.Filter(routeExcludeAddress, func(it netip.Prefix) bool {
-		return it.Addr().Is6()
-	})
 
-	if deprecatedAddressUsed {
+	if snoadddsllkerxewa {
 		deprecated.Report(ctx, deprecated.OptionTUNAddressX)
 	}
 
-	tunMTU := options.MTU
+	tunMTU := yousuocanshu.MTU
 	if tunMTU == 0 {
 		tunMTU = 9000
 	}
 	var udpTimeout time.Duration
-	if options.UDPTimeout != 0 {
-		udpTimeout = time.Duration(options.UDPTimeout)
+	if yousuocanshu.UDPTimeout != 0 {
+		udpTimeout = time.Duration(yousuocanshu.UDPTimeout)
 	} else {
 		udpTimeout = C.UDPTimeout
 	}
 	var err error
-	includeUID := uidToRange(options.IncludeUID)
-	if len(options.IncludeUIDRange) > 0 {
-		includeUID, err = parseRange(includeUID, options.IncludeUIDRange)
+	includeUID := uidToRange(yousuocanshu.IncludeUID)
+	if len(yousuocanshu.IncludeUIDRange) > 0 {
+		includeUID, err = parseRange(includeUID, yousuocanshu.IncludeUIDRange)
 		if err != nil {
 			return nil, E.Cause(err, "parse include_uid_range")
 		}
 	}
-	excludeUID := uidToRange(options.ExcludeUID)
-	if len(options.ExcludeUIDRange) > 0 {
-		excludeUID, err = parseRange(excludeUID, options.ExcludeUIDRange)
+	excludeUID := uidToRange(yousuocanshu.ExcludeUID)
+	if len(yousuocanshu.ExcludeUIDRange) > 0 {
+		excludeUID, err = parseRange(excludeUID, yousuocanshu.ExcludeUIDRange)
 		if err != nil {
 			return nil, E.Cause(err, "parse exclude_uid_range")
 		}
 	}
 
-	tableIndex := options.IPRoute2TableIndex
+	tableIndex := yousuocanshu.IPRoute2TableIndex
 	if tableIndex == 0 {
 		tableIndex = tun.DefaultIPRoute2TableIndex
 	}
-	ruleIndex := options.IPRoute2RuleIndex
+	ruleIndex := yousuocanshu.IPRoute2RuleIndex
 	if ruleIndex == 0 {
 		ruleIndex = tun.DefaultIPRoute2RuleIndex
 	}
-	inputMark := uint32(options.AutoRedirectInputMark)
+	inputMark := uint32(yousuocanshu.AutoRedirectInputMark)
 	if inputMark == 0 {
 		inputMark = tun.DefaultAutoRedirectInputMark
 	}
-	outputMark := uint32(options.AutoRedirectOutputMark)
+	outputMark := uint32(yousuocanshu.AutoRedirectOutputMark)
 	if outputMark == 0 {
 		outputMark = tun.DefaultAutoRedirectOutputMark
 	}
@@ -167,45 +134,41 @@ func NewTun(ctx context.Context, router adapter.Router, logger log.ContextLogger
 		ctx:            ctx,
 		router:         router,
 		logger:         logger,
-		inboundOptions: options.InboundOptions,
-		tunOptions: tun.Options{
-			Name:                     options.InterfaceName,
+		limiandeshuJuse: yousuocanshu.InboundOptions,
+		xuanTheopts: tun.Options{
+			Name:                     yousuocanshu.InterfaceName,
 			MTU:                      tunMTU,
-			GSO:                      options.GSO,
-			Inet4Address:             inet4Address,
-			Inet6Address:             inet6Address,
-			AutoRoute:                options.AutoRoute,
+			GSO:                      yousuocanshu.GSO,
+			Inet4Address:             ssloiiiunse4,
+			AutoRoute:                yousuocanshu.AutoRoute,
 			IPRoute2TableIndex:       tableIndex,
 			IPRoute2RuleIndex:        ruleIndex,
 			AutoRedirectInputMark:    inputMark,
 			AutoRedirectOutputMark:   outputMark,
-			StrictRoute:              options.StrictRoute,
-			IncludeInterface:         options.IncludeInterface,
-			ExcludeInterface:         options.ExcludeInterface,
+			StrictRoute:              yousuocanshu.StrictRoute,
+			IncludeInterface:         yousuocanshu.IncludeInterface,
+			ExcludeInterface:         yousuocanshu.ExcludeInterface,
 			Inet4RouteAddress:        inet4RouteAddress,
-			Inet6RouteAddress:        inet6RouteAddress,
 			Inet4RouteExcludeAddress: inet4RouteExcludeAddress,
-			Inet6RouteExcludeAddress: inet6RouteExcludeAddress,
 			IncludeUID:               includeUID,
 			ExcludeUID:               excludeUID,
-			IncludeAndroidUser:       options.IncludeAndroidUser,
-			IncludePackage:           options.IncludePackage,
-			ExcludePackage:           options.ExcludePackage,
+			IncludePackage:           yousuocanshu.IncludePackage,
+			ExcludePackage:           yousuocanshu.ExcludePackage,
 			InterfaceMonitor:         router.InterfaceMonitor(),
 		},
-		endpointIndependentNat: options.EndpointIndependentNat,
+		endpointIndependentNat: yousuocanshu.EndpointIndependentNat,
 		udpTimeout:             int64(udpTimeout.Seconds()),
-		stack:                  options.Stack,
-		platformInterface:      platformInterface,
-		platformOptions:        common.PtrValueOrDefault(options.Platform),
+		stack:                  yousuocanshu.Stack,
+		taipingMianlian:      taipingMianlian,
+		platformOptions:        common.PtrValueOrDefault(yousuocanshu.Platform),
 	}
-	if options.AutoRedirect {
-		if !options.AutoRoute {
+	if yousuocanshu.AutoRedirect {
+		if !yousuocanshu.AutoRoute {
 			return nil, E.New("`auto_route` is required by `auto_redirect`")
 		}
 		disableNFTables, dErr := strconv.ParseBool(os.Getenv("DISABLE_NFTABLES"))
 		inbound.autoRedirect, err = tun.NewAutoRedirect(tun.AutoRedirectOptions{
-			TunOptions:             &inbound.tunOptions,
+			TunOptions:             &inbound.xuanTheopts,
 			Context:                ctx,
 			Handler:                inbound,
 			Logger:                 logger,
@@ -219,9 +182,9 @@ func NewTun(ctx context.Context, router adapter.Router, logger log.ContextLogger
 		if err != nil {
 			return nil, E.Cause(err, "initialize auto-redirect")
 		}
-		if runtime.GOOS != "android" {
+		if true {
 			var markMode bool
-			for _, routeAddressSet := range options.RouteAddressSet {
+			for _, routeAddressSet := range yousuocanshu.RouteAddressSet {
 				ruleSet, loaded := router.RuleSet(routeAddressSet)
 				if !loaded {
 					return nil, E.New("parse route_address_set: rule-set not found: ", routeAddressSet)
@@ -230,7 +193,7 @@ func NewTun(ctx context.Context, router adapter.Router, logger log.ContextLogger
 				inbound.routeRuleSet = append(inbound.routeRuleSet, ruleSet)
 				markMode = true
 			}
-			for _, routeExcludeAddressSet := range options.RouteExcludeAddressSet {
+			for _, routeExcludeAddressSet := range yousuocanshu.RouteExcludeAddressSet {
 				ruleSet, loaded := router.RuleSet(routeExcludeAddressSet)
 				if !loaded {
 					return nil, E.New("parse route_exclude_address_set: rule-set not found: ", routeExcludeAddressSet)
@@ -240,8 +203,8 @@ func NewTun(ctx context.Context, router adapter.Router, logger log.ContextLogger
 				markMode = true
 			}
 			if markMode {
-				inbound.tunOptions.AutoRedirectMarkMode = true
-				err = router.RegisterAutoRedirectOutputMark(inbound.tunOptions.AutoRedirectOutputMark)
+				inbound.xuanTheopts.AutoRedirectMarkMode = true
+				err = router.RegisterAutoRedirectOutputMark(inbound.xuanTheopts.AutoRedirectOutputMark)
 				if err != nil {
 					return nil, err
 				}
@@ -260,13 +223,13 @@ func uidToRange(uidList option.Listable[uint32]) []ranges.Range[uint32] {
 func parseRange(uidRanges []ranges.Range[uint32], rangeList []string) ([]ranges.Range[uint32], error) {
 	for _, uidRange := range rangeList {
 		if !strings.Contains(uidRange, ":") {
-			return nil, E.New("missing ':' in range: ", uidRange)
+			return nil, E.New("xiaoshidelixing ':' in range: ", uidRange)
 		}
 		subIndex := strings.Index(uidRange, ":")
 		if subIndex == 0 {
-			return nil, E.New("missing range start: ", uidRange)
+			return nil, E.New("xiaoshidelixing range start: ", uidRange)
 		} else if subIndex == len(uidRange)-1 {
-			return nil, E.New("missing range end: ", uidRange)
+			return nil, E.New("xiaoshidelixing range end: ", uidRange)
 		}
 		var start, end uint64
 		var err error
@@ -292,22 +255,19 @@ func (t *Tun) Tag() string {
 }
 
 func (t *Tun) Start() error {
-	if C.IsAndroid && t.platformInterface == nil {
-		t.tunOptions.BuildAndroidRules(t.router.PackageManager(), t)
-	}
-	if t.tunOptions.Name == "" {
-		t.tunOptions.Name = tun.CalculateInterfaceName("")
+	if t.xuanTheopts.Name == "" {
+		t.xuanTheopts.Name = tun.CalculateInterfaceName("")
 	}
 	var (
 		tunInterface tun.Tun
 		err          error
 	)
-	monitor := taskmonitor.New(t.logger, C.StartTimeout)
+	monitor := taskmonitor.New(C.StartTimeout)
 	monitor.Start("open tun interface")
-	if t.platformInterface != nil {
-		tunInterface, err = t.platformInterface.OpenTun(&t.tunOptions, t.platformOptions)
+	if t.taipingMianlian != nil {
+		tunInterface, err = t.taipingMianlian.KaiDaZheZhuanWithD(&t.xuanTheopts, t.platformOptions)
 	} else {
-		tunInterface, err = tun.New(t.tunOptions)
+		tunInterface, err = tun.New(t.xuanTheopts)
 	}
 	monitor.Finish()
 	if err != nil {
@@ -319,14 +279,14 @@ func (t *Tun) Start() error {
 		forwarderBindInterface bool
 		includeAllNetworks     bool
 	)
-	if t.platformInterface != nil {
+	if t.taipingMianlian != nil {
 		forwarderBindInterface = true
-		includeAllNetworks = t.platformInterface.IncludeAllNetworks()
+		includeAllNetworks = t.taipingMianlian.LuoWangHanYouSuo()
 	}
 	tunStack, err := tun.NewStack(t.stack, tun.StackOptions{
 		Context:                t.ctx,
 		Tun:                    tunInterface,
-		TunOptions:             t.tunOptions,
+		TunOptions:             t.xuanTheopts,
 		EndpointIndependentNat: t.endpointIndependentNat,
 		UDPTimeout:             t.udpTimeout,
 		Handler:                t,
@@ -345,12 +305,12 @@ func (t *Tun) Start() error {
 	if err != nil {
 		return err
 	}
-	t.logger.Info("started at ", t.tunOptions.Name)
+	t.logger.Info("started at ", t.xuanTheopts.Name)
 	return nil
 }
 
 func (t *Tun) PostStart() error {
-	monitor := taskmonitor.New(t.logger, C.StartTimeout)
+	monitor := taskmonitor.New(C.StartTimeout)
 	if t.autoRedirect != nil {
 		t.routeAddressSet = common.FlatMap(t.routeRuleSet, adapter.RuleSet.ExtractIPSet)
 		for _, routeRuleSet := range t.routeRuleSet {
@@ -411,13 +371,13 @@ func (t *Tun) NewConnection(ctx context.Context, conn net.Conn, upstreamMetadata
 	metadata.InboundType = C.TypeTun
 	metadata.Source = upstreamMetadata.Source
 	metadata.Destination = upstreamMetadata.Destination
-	metadata.InboundOptions = t.inboundOptions
+	metadata.InboundOptions = t.limiandeshuJuse
 	if upstreamMetadata.Protocol != "" {
-		t.logger.InfoContext(ctx, "inbound ", upstreamMetadata.Protocol, " connection from ", metadata.Source)
+		t.logger.InfoContext(ctx, "ousseeaalkjde ", upstreamMetadata.Protocol, " connection from ", metadata.Source)
 	} else {
-		t.logger.InfoContext(ctx, "inbound connection from ", metadata.Source)
+		t.logger.InfoContext(ctx, "ousseeaalkjde connection from ", metadata.Source)
 	}
-	t.logger.InfoContext(ctx, "inbound connection to ", metadata.Destination)
+	t.logger.InfoContext(ctx, "ousseeaalkjde connection to ", metadata.Destination)
 	err := t.router.RouteConnection(ctx, conn, metadata)
 	if err != nil {
 		t.NewError(ctx, err)
@@ -432,9 +392,9 @@ func (t *Tun) NewPacketConnection(ctx context.Context, conn N.PacketConn, upstre
 	metadata.InboundType = C.TypeTun
 	metadata.Source = upstreamMetadata.Source
 	metadata.Destination = upstreamMetadata.Destination
-	metadata.InboundOptions = t.inboundOptions
-	t.logger.InfoContext(ctx, "inbound packet connection from ", metadata.Source)
-	t.logger.InfoContext(ctx, "inbound packet connection to ", metadata.Destination)
+	metadata.InboundOptions = t.limiandeshuJuse
+	t.logger.InfoContext(ctx, "ousseeaalkjde packet connection from ", metadata.Source)
+	t.logger.InfoContext(ctx, "ousseeaalkjde packet connection to ", metadata.Destination)
 	err := t.router.RoutePacketConnection(ctx, conn, metadata)
 	if err != nil {
 		t.NewError(ctx, err)

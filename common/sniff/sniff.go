@@ -9,8 +9,8 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common/buf"
-	E "github.com/sagernet/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/buf"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
 )
 
 type (

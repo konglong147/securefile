@@ -5,7 +5,7 @@ type VLESSInboundOptions struct {
 	Users []VLESSUser `json:"users,omitempty"`
 	InboundTLSOptionsContainer
 	Multiplex *InboundMultiplexOptions `json:"multiplex,omitempty"`
-	Transport *V2RayTransportOptions   `json:"transport,omitempty"`
+	Transport *VtuoBirtereJstosole   `json:"transport,omitempty"`
 }
 
 type VLESSUser struct {
@@ -22,6 +22,6 @@ type VLESSOutboundOptions struct {
 	Network NetworkList `json:"network,omitempty"`
 	OutboundTLSOptionsContainer
 	Multiplex      *OutboundMultiplexOptions `json:"multiplex,omitempty"`
-	Transport      *V2RayTransportOptions    `json:"transport,omitempty"`
+	Transport      *VtuoBirtereJstosole    `json:"transport,omitempty"`
 	PacketEncoding *string                   `json:"packet_encoding,omitempty"`
 }

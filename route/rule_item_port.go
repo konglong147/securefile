@@ -4,30 +4,30 @@ import (
 	"strings"
 
 	"github.com/konglong147/securefile/adapter"
-	F "github.com/sagernet/sing/common/format"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-var _ RuleItem = (*PortItem)(nil)
+var _ RuleItem = (*JiekouMetise)(nil)
 
-type PortItem struct {
+type JiekouMetise struct {
 	ports    []uint16
 	portMap  map[uint16]bool
 	isSource bool
 }
 
-func NewPortItem(isSource bool, ports []uint16) *PortItem {
+func NewJiekouMetise(isSource bool, ports []uint16) *JiekouMetise {
 	portMap := make(map[uint16]bool)
 	for _, port := range ports {
 		portMap[port] = true
 	}
-	return &PortItem{
+	return &JiekouMetise{
 		ports:    ports,
 		portMap:  portMap,
 		isSource: isSource,
 	}
 }
 
-func (r *PortItem) Match(metadata *adapter.InboundContext) bool {
+func (r *JiekouMetise) Match(metadata *adapter.InboundContext) bool {
 	if r.isSource {
 		return r.portMap[metadata.Source.Port]
 	} else {
@@ -35,7 +35,7 @@ func (r *PortItem) Match(metadata *adapter.InboundContext) bool {
 	}
 }
 
-func (r *PortItem) String() string {
+func (r *JiekouMetise) String() string {
 	var description string
 	if r.isSource {
 		description = "source_port="

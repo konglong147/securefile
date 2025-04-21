@@ -6,37 +6,37 @@ import (
 	"time"
 
 	"github.com/konglong147/securefile/adapter"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/buf"
-	"github.com/sagernet/sing/common/control"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/buf"
+	"github.com/konglong147/securefile/local/sing/common/control"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
-func (a *myInboundAdapter) ListenUDP() (net.PacketConn, error) {
-	bindAddr := M.SocksaddrFrom(a.listenOptions.Listen.Build(), a.listenOptions.ListenPort)
+func (a *theLibaoziwenzi) tingxieDpus() (net.PacketConn, error) {
+	bindAddr := M.SocksaddrFrom(a.tingshuoCanshu.Listen.Build(), a.tingshuoCanshu.ListenPort)
 	var lc net.ListenConfig
 	var udpFragment bool
-	if a.listenOptions.UDPFragment != nil {
-		udpFragment = *a.listenOptions.UDPFragment
+	if a.tingshuoCanshu.UDPFragment != nil {
+		udpFragment = *a.tingshuoCanshu.UDPFragment
 	} else {
-		udpFragment = a.listenOptions.UDPFragmentDefault
+		udpFragment = a.tingshuoCanshu.UDPFragmentDefault
 	}
 	if !udpFragment {
 		lc.Control = control.Append(lc.Control, control.DisableUDPFragment())
 	}
-	udpConn, err := lc.ListenPacket(a.ctx, M.NetworkFromNetAddr(N.NetworkUDP, bindAddr.Addr), bindAddr.String())
+	odeonnoCnet, err := lc.ListenPacket(a.ctx, M.NetworkFromNetAddr(N.NetworkUDP, bindAddr.Addr), bindAddr.String())
 	if err != nil {
 		return nil, err
 	}
-	a.udpConn = udpConn.(*net.UDPConn)
+	a.odeonnoCnet = odeonnoCnet.(*net.UDPConn)
 	a.udpAddr = bindAddr
-	a.logger.Info("udp server started at ", udpConn.LocalAddr())
-	return udpConn, err
+	a.logger.Info("udp server started at ", odeonnoCnet.LocalAddr())
+	return odeonnoCnet, err
 }
 
-func (a *myInboundAdapter) loopUDPIn() {
+func (a *theLibaoziwenzi) tingxielpsea() {
 	defer close(a.packetOutboundClosed)
 	buffer := buf.NewPacket()
 	defer buffer.Release()
@@ -45,7 +45,7 @@ func (a *myInboundAdapter) loopUDPIn() {
 	packetService := (*myInboundPacketAdapter)(a)
 	for {
 		buffer.Reset()
-		n, addr, err := a.udpConn.ReadFromUDPAddrPort(buffer.FreeBytes())
+		n, addr, err := a.odeonnoCnet.ReadFromUDPAddrPort(buffer.FreeBytes())
 		if err != nil {
 			return
 		}
@@ -53,7 +53,7 @@ func (a *myInboundAdapter) loopUDPIn() {
 		var metadata adapter.InboundContext
 		metadata.Inbound = a.tag
 		metadata.InboundType = a.protocol
-		metadata.InboundOptions = a.listenOptions.InboundOptions
+		metadata.InboundOptions = a.tingshuoCanshu.InboundOptions
 		metadata.Source = M.SocksaddrFromNetIP(addr).Unwrap()
 		metadata.OriginDestination = a.udpAddr
 		err = a.packetHandler.NewPacket(a.ctx, packetService, buffer, metadata)
@@ -63,7 +63,7 @@ func (a *myInboundAdapter) loopUDPIn() {
 	}
 }
 
-func (a *myInboundAdapter) loopUDPOOBIn() {
+func (a *theLibaoziwenzi) loopUDPOOBIn() {
 	defer close(a.packetOutboundClosed)
 	buffer := buf.NewPacket()
 	defer buffer.Release()
@@ -73,7 +73,7 @@ func (a *myInboundAdapter) loopUDPOOBIn() {
 	oob := make([]byte, 1024)
 	for {
 		buffer.Reset()
-		n, oobN, _, addr, err := a.udpConn.ReadMsgUDPAddrPort(buffer.FreeBytes(), oob)
+		n, oobN, _, addr, err := a.odeonnoCnet.ReadMsgUDPAddrPort(buffer.FreeBytes(), oob)
 		if err != nil {
 			return
 		}
@@ -81,7 +81,7 @@ func (a *myInboundAdapter) loopUDPOOBIn() {
 		var metadata adapter.InboundContext
 		metadata.Inbound = a.tag
 		metadata.InboundType = a.protocol
-		metadata.InboundOptions = a.listenOptions.InboundOptions
+		metadata.InboundOptions = a.tingshuoCanshu.InboundOptions
 		metadata.Source = M.SocksaddrFromNetIP(addr).Unwrap()
 		metadata.OriginDestination = a.udpAddr
 		err = a.oobPacketHandler.NewPacket(a.ctx, packetService, buffer, oob[:oobN], metadata)
@@ -91,12 +91,12 @@ func (a *myInboundAdapter) loopUDPOOBIn() {
 	}
 }
 
-func (a *myInboundAdapter) loopUDPInThreadSafe() {
+func (a *theLibaoziwenzi) tingxielpseaThreadSafe() {
 	defer close(a.packetOutboundClosed)
 	packetService := (*myInboundPacketAdapter)(a)
 	for {
 		buffer := buf.NewPacket()
-		n, addr, err := a.udpConn.ReadFromUDPAddrPort(buffer.FreeBytes())
+		n, addr, err := a.odeonnoCnet.ReadFromUDPAddrPort(buffer.FreeBytes())
 		if err != nil {
 			buffer.Release()
 			return
@@ -105,7 +105,7 @@ func (a *myInboundAdapter) loopUDPInThreadSafe() {
 		var metadata adapter.InboundContext
 		metadata.Inbound = a.tag
 		metadata.InboundType = a.protocol
-		metadata.InboundOptions = a.listenOptions.InboundOptions
+		metadata.InboundOptions = a.tingshuoCanshu.InboundOptions
 		metadata.Source = M.SocksaddrFromNetIP(addr).Unwrap()
 		metadata.OriginDestination = a.udpAddr
 		err = a.packetHandler.NewPacket(a.ctx, packetService, buffer, metadata)
@@ -116,13 +116,13 @@ func (a *myInboundAdapter) loopUDPInThreadSafe() {
 	}
 }
 
-func (a *myInboundAdapter) loopUDPOOBInThreadSafe() {
+func (a *theLibaoziwenzi) loopUDPOOBInThreadSafe() {
 	defer close(a.packetOutboundClosed)
 	packetService := (*myInboundPacketAdapter)(a)
 	oob := make([]byte, 1024)
 	for {
 		buffer := buf.NewPacket()
-		n, oobN, _, addr, err := a.udpConn.ReadMsgUDPAddrPort(buffer.FreeBytes(), oob)
+		n, oobN, _, addr, err := a.odeonnoCnet.ReadMsgUDPAddrPort(buffer.FreeBytes(), oob)
 		if err != nil {
 			buffer.Release()
 			return
@@ -131,7 +131,7 @@ func (a *myInboundAdapter) loopUDPOOBInThreadSafe() {
 		var metadata adapter.InboundContext
 		metadata.Inbound = a.tag
 		metadata.InboundType = a.protocol
-		metadata.InboundOptions = a.listenOptions.InboundOptions
+		metadata.InboundOptions = a.tingshuoCanshu.InboundOptions
 		metadata.Source = M.SocksaddrFromNetIP(addr).Unwrap()
 		metadata.OriginDestination = a.udpAddr
 		err = a.oobPacketHandler.NewPacket(a.ctx, packetService, buffer, oob[:oobN], metadata)
@@ -142,7 +142,7 @@ func (a *myInboundAdapter) loopUDPOOBInThreadSafe() {
 	}
 }
 
-func (a *myInboundAdapter) loopUDPOut() {
+func (a *theLibaoziwenzi) loopUDPOut() {
 	for {
 		select {
 		case packet := <-a.packetOutbound:
@@ -164,22 +164,22 @@ func (a *myInboundAdapter) loopUDPOut() {
 	}
 }
 
-func (a *myInboundAdapter) writePacket(buffer *buf.Buffer, destination M.Socksaddr) error {
+func (a *theLibaoziwenzi) writePacket(buffer *buf.Buffer, destination M.Socksaddr) error {
 	defer buffer.Release()
 	if destination.IsFqdn() {
 		udpAddr, err := net.ResolveUDPAddr(N.NetworkUDP, destination.String())
 		if err != nil {
 			return err
 		}
-		return common.Error(a.udpConn.WriteTo(buffer.Bytes(), udpAddr))
+		return common.Error(a.odeonnoCnet.WriteTo(buffer.Bytes(), udpAddr))
 	}
-	return common.Error(a.udpConn.WriteToUDPAddrPort(buffer.Bytes(), destination.AddrPort()))
+	return common.Error(a.odeonnoCnet.WriteToUDPAddrPort(buffer.Bytes(), destination.AddrPort()))
 }
 
-type myInboundPacketAdapter myInboundAdapter
+type myInboundPacketAdapter theLibaoziwenzi
 
 func (s *myInboundPacketAdapter) ReadPacket(buffer *buf.Buffer) (M.Socksaddr, error) {
-	n, addr, err := s.udpConn.ReadFromUDPAddrPort(buffer.FreeBytes())
+	n, addr, err := s.odeonnoCnet.ReadFromUDPAddrPort(buffer.FreeBytes())
 	if err != nil {
 		return M.Socksaddr{}, err
 	}
@@ -196,7 +196,7 @@ type myInboundPacket struct {
 }
 
 func (s *myInboundPacketAdapter) Upstream() any {
-	return s.udpConn
+	return s.odeonnoCnet
 }
 
 func (s *myInboundPacketAdapter) WritePacket(buffer *buf.Buffer, destination M.Socksaddr) error {
@@ -209,21 +209,21 @@ func (s *myInboundPacketAdapter) WritePacket(buffer *buf.Buffer, destination M.S
 }
 
 func (s *myInboundPacketAdapter) Close() error {
-	return s.udpConn.Close()
+	return s.odeonnoCnet.Close()
 }
 
 func (s *myInboundPacketAdapter) LocalAddr() net.Addr {
-	return s.udpConn.LocalAddr()
+	return s.odeonnoCnet.LocalAddr()
 }
 
 func (s *myInboundPacketAdapter) SetDeadline(t time.Time) error {
-	return s.udpConn.SetDeadline(t)
+	return s.odeonnoCnet.SetDeadline(t)
 }
 
 func (s *myInboundPacketAdapter) SetReadDeadline(t time.Time) error {
-	return s.udpConn.SetReadDeadline(t)
+	return s.odeonnoCnet.SetReadDeadline(t)
 }
 
 func (s *myInboundPacketAdapter) SetWriteDeadline(t time.Time) error {
-	return s.udpConn.SetWriteDeadline(t)
+	return s.odeonnoCnet.SetWriteDeadline(t)
 }

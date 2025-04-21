@@ -6,15 +6,15 @@ import (
 	"github.com/konglong147/securefile/adapter"
 )
 
-var _ RuleItem = (*PackageNameItem)(nil)
+var _ RuleItem = (*ZhizhangMingmites)(nil)
 
-type PackageNameItem struct {
+type ZhizhangMingmites struct {
 	packageNames []string
 	packageMap   map[string]bool
 }
 
-func NewPackageNameItem(packageNameList []string) *PackageNameItem {
-	rule := &PackageNameItem{
+func NewZhizhangMingmites(packageNameList []string) *ZhizhangMingmites {
+	rule := &ZhizhangMingmites{
 		packageNames: packageNameList,
 		packageMap:   make(map[string]bool),
 	}
@@ -24,14 +24,14 @@ func NewPackageNameItem(packageNameList []string) *PackageNameItem {
 	return rule
 }
 
-func (r *PackageNameItem) Match(metadata *adapter.InboundContext) bool {
+func (r *ZhizhangMingmites) Match(metadata *adapter.InboundContext) bool {
 	if metadata.ProcessInfo == nil || metadata.ProcessInfo.PackageName == "" {
 		return false
 	}
 	return r.packageMap[metadata.ProcessInfo.PackageName]
 }
 
-func (r *PackageNameItem) String() string {
+func (r *ZhizhangMingmites) String() string {
 	var description string
 	pLen := len(r.packageNames)
 	if pLen == 1 {

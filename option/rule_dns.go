@@ -4,9 +4,9 @@ import (
 	"reflect"
 
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/json"
+	"github.com/konglong147/securefile/local/sing/common"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/json"
 )
 
 type _DNSRule struct {

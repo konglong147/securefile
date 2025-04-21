@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sagernet/sing/common/rw"
+	"github.com/konglong147/securefile/local/sing/common/rw"
 )
 
 const dirName = "sing-box"

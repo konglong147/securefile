@@ -3,7 +3,7 @@ package route
 import (
 	C "github.com/konglong147/securefile/constant"
 	"github.com/konglong147/securefile/option"
-	"github.com/sagernet/sing/common"
+	"github.com/konglong147/securefile/local/sing/common"
 )
 
 func hasRule(rules []option.Rule, cond func(rule option.DefaultRule) bool) bool {

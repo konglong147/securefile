@@ -1,10 +1,10 @@
 package option
 
 import (
-	"github.com/sagernet/sing/common"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/json"
-	"github.com/sagernet/sing/common/json/badjson"
+	"github.com/konglong147/securefile/local/sing/common"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/json"
+	"github.com/konglong147/securefile/local/sing/common/json/badjson"
 )
 
 func ToMap(v any) (*badjson.JSONObject, error) {

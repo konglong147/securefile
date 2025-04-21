@@ -4,8 +4,8 @@ import (
 	"io"
 	"sync"
 
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/x/list"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/x/list"
 )
 
 var (

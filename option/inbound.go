@@ -4,24 +4,14 @@ import (
 	"time"
 
 	C "github.com/konglong147/securefile/constant"
-	E "github.com/sagernet/sing/common/exceptions"
-	"github.com/sagernet/sing/common/json"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	"github.com/konglong147/securefile/local/sing/common/json"
 )
 
 type _Inbound struct {
 	Type               string                    `json:"type"`
 	Tag                string                    `json:"tag,omitempty"`
 	TunOptions         TunInboundOptions         `json:"-"`
-	RedirectOptions    RedirectInboundOptions    `json:"-"`
-	TProxyOptions      TProxyInboundOptions      `json:"-"`
-	DirectOptions      DirectInboundOptions      `json:"-"`
-	SocksOptions       SocksInboundOptions       `json:"-"`
-	HTTPOptions        HTTPMixedInboundOptions   `json:"-"`
-	MixedOptions       HTTPMixedInboundOptions   `json:"-"`
-	VMessOptions       VMessInboundOptions       `json:"-"`
-	NaiveOptions       NaiveInboundOptions       `json:"-"`
-	VLESSOptions       VLESSInboundOptions       `json:"-"`
-	TUICOptions        TUICInboundOptions        `json:"-"`
 }
 
 type Inbound _Inbound
@@ -31,28 +21,8 @@ func (h *Inbound) RawOptions() (any, error) {
 	switch h.Type {
 	case C.TypeTun:
 		rawOptionsPtr = &h.TunOptions
-	case C.TypeRedirect:
-		rawOptionsPtr = &h.RedirectOptions
-	case C.TypeTProxy:
-		rawOptionsPtr = &h.TProxyOptions
-	case C.TypeDirect:
-		rawOptionsPtr = &h.DirectOptions
-	case C.TypeSOCKS:
-		rawOptionsPtr = &h.SocksOptions
-	case C.TypeHTTP:
-		rawOptionsPtr = &h.HTTPOptions
-	case C.TypeMixed:
-		rawOptionsPtr = &h.MixedOptions
-	case C.TypeVMess:
-		rawOptionsPtr = &h.VMessOptions
-	case C.TypeNaive:
-		rawOptionsPtr = &h.NaiveOptions
-	case C.TypeVLESS:
-		rawOptionsPtr = &h.VLESSOptions
-	case C.TypeTUIC:
-		rawOptionsPtr = &h.TUICOptions
 	case "":
-		return nil, E.New("missing inbound type")
+		return nil, E.New("xiaoshidelixing inbound type")
 	default:
 		return nil, E.New("unknown inbound type: ", h.Type)
 	}
@@ -123,13 +93,13 @@ func (c *UDPTimeoutCompat) UnmarshalJSON(data []byte) error {
 
 type ListenOptionsWrapper interface {
 	TakeListenOptions() ListenOptions
-	ReplaceListenOptions(options ListenOptions)
+	ReplaceListenOptions(yousuocanshu ListenOptions)
 }
 
 func (o *ListenOptions) TakeListenOptions() ListenOptions {
 	return *o
 }
 
-func (o *ListenOptions) ReplaceListenOptions(options ListenOptions) {
-	*o = options
+func (o *ListenOptions) ReplaceListenOptions(yousuocanshu ListenOptions) {
+	*o = yousuocanshu
 }

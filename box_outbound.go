@@ -6,80 +6,80 @@ import (
 	"github.com/konglong147/securefile/adapter"
 	"github.com/konglong147/securefile/common/taskmonitor"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing/common"
-	E "github.com/sagernet/sing/common/exceptions"
-	F "github.com/sagernet/sing/common/format"
+	"github.com/konglong147/securefile/local/sing/common"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	F "github.com/konglong147/securefile/local/sing/common/format"
 )
 
-func (s *Box) startOutbounds() error {
-	monitor := taskmonitor.New(s.logger, C.StartTimeout)
-	outboundTags := make(map[adapter.Outbound]string)
-	outbounds := make(map[string]adapter.Outbound)
-	for i, outboundToStart := range s.outbounds {
-		var outboundTag string
-		if outboundToStart.Tag() == "" {
-			outboundTag = F.ToString(i)
+func (s *Longxiang) shiKaiWaibose() error {
+	themissaaer := taskmonitor.New(C.StartTimeout)
+	waibossages := make(map[adapter.Outbound]string)
+	waimianshujuku := make(map[string]adapter.Outbound)
+	for i, waioussoutukais := range s.waimianshujuku {
+		var waiouttgase string
+		if waioussoutukais.Tag() == "" {
+			waiouttgase = F.ToString(i)
 		} else {
-			outboundTag = outboundToStart.Tag()
+			waiouttgase = waioussoutukais.Tag()
 		}
-		if _, exists := outbounds[outboundTag]; exists {
-			return E.New("outbound tag ", outboundTag, " duplicated")
+		if _, exists := waimianshujuku[waiouttgase]; exists {
+			return E.New("outbound tag ", waiouttgase, " duplicated")
 		}
-		outboundTags[outboundToStart] = outboundTag
-		outbounds[outboundTag] = outboundToStart
+		waibossages[waioussoutukais] = waiouttgase
+		waimianshujuku[waiouttgase] = waioussoutukais
 	}
-	started := make(map[string]bool)
+	kaisitaed := make(map[string]bool)
 	for {
 		canContinue := false
 	startOne:
-		for _, outboundToStart := range s.outbounds {
-			outboundTag := outboundTags[outboundToStart]
-			if started[outboundTag] {
+		for _, waioussoutukais := range s.waimianshujuku {
+			waiouttgase := waibossages[waioussoutukais]
+			if kaisitaed[waiouttgase] {
 				continue
 			}
-			dependencies := outboundToStart.Dependencies()
+			dependencies := waioussoutukais.Dependencies()
 			for _, dependency := range dependencies {
-				if !started[dependency] {
+				if !kaisitaed[dependency] {
 					continue startOne
 				}
 			}
-			started[outboundTag] = true
+			kaisitaed[waiouttgase] = true
 			canContinue = true
-			if starter, isStarter := outboundToStart.(interface {
+			if starter, isStarter := waioussoutukais.(interface {
 				Start() error
 			}); isStarter {
-				monitor.Start("initialize outbound/", outboundToStart.Type(), "[", outboundTag, "]")
+				themissaaer.Start("initialize outbound/", waioussoutukais.Type(), "[", waiouttgase, "]")
 				err := starter.Start()
-				monitor.Finish()
+				themissaaer.Finish()
 				if err != nil {
-					return E.Cause(err, "initialize outbound/", outboundToStart.Type(), "[", outboundTag, "]")
+					return E.Cause(err, "initialize outbound/", waioussoutukais.Type(), "[", waiouttgase, "]")
 				}
 			}
 		}
-		if len(started) == len(s.outbounds) {
+		if len(kaisitaed) == len(s.waimianshujuku) {
 			break
 		}
 		if canContinue {
 			continue
 		}
-		currentOutbound := common.Find(s.outbounds, func(it adapter.Outbound) bool {
-			return !started[outboundTags[it]]
+		dangqianoutssees := common.Find(s.waimianshujuku, func(it adapter.Outbound) bool {
+			return !kaisitaed[waibossages[it]]
 		})
 		var lintOutbound func(oTree []string, oCurrent adapter.Outbound) error
 		lintOutbound = func(oTree []string, oCurrent adapter.Outbound) error {
-			problemOutboundTag := common.Find(oCurrent.Dependencies(), func(it string) bool {
-				return !started[it]
+			wentiwaibotgaes := common.Find(oCurrent.Dependencies(), func(it string) bool {
+				return !kaisitaed[it]
 			})
-			if common.Contains(oTree, problemOutboundTag) {
-				return E.New("circular outbound dependency: ", strings.Join(oTree, " -> "), " -> ", problemOutboundTag)
+			if common.Contains(oTree, wentiwaibotgaes) {
+				return E.New("circular outbound dependency: ", strings.Join(oTree, " -> "), " -> ", wentiwaibotgaes)
 			}
-			problemOutbound := outbounds[problemOutboundTag]
+			problemOutbound := waimianshujuku[wentiwaibotgaes]
 			if problemOutbound == nil {
-				return E.New("dependency[", problemOutboundTag, "] not found for outbound[", outboundTags[oCurrent], "]")
+				return E.New("dependency[", wentiwaibotgaes, "] not found for outbound[", waibossages[oCurrent], "]")
 			}
-			return lintOutbound(append(oTree, problemOutboundTag), problemOutbound)
+			return lintOutbound(append(oTree, wentiwaibotgaes), problemOutbound)
 		}
-		return lintOutbound([]string{outboundTags[currentOutbound]}, currentOutbound)
+		return lintOutbound([]string{waibossages[dangqianoutssees]}, dangqianoutssees)
 	}
 	return nil
 }

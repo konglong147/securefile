@@ -8,14 +8,14 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	C "github.com/konglong147/securefile/constant"
-	"github.com/sagernet/sing-dns"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/buf"
-	"github.com/sagernet/sing/common/bufio"
-	"github.com/sagernet/sing/common/canceler"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
-	"github.com/sagernet/sing/common/task"
+	"github.com/konglong147/securefile/local/sing-dns"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/buf"
+	"github.com/konglong147/securefile/local/sing/common/bufio"
+	"github.com/konglong147/securefile/local/sing/common/canceler"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/common/task"
 
 	mDNS "github.com/miekg/dns"
 )

@@ -8,17 +8,16 @@ import (
 
 	"github.com/konglong147/securefile/adapter"
 	"github.com/konglong147/securefile/log"
-	"github.com/sagernet/sing/common"
-	"github.com/sagernet/sing/common/auth"
-	E "github.com/sagernet/sing/common/exceptions"
-	M "github.com/sagernet/sing/common/metadata"
-	N "github.com/sagernet/sing/common/network"
-	"github.com/sagernet/sing/protocol/socks"
+	"github.com/konglong147/securefile/local/sing/common"
+	"github.com/konglong147/securefile/local/sing/common/auth"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	M "github.com/konglong147/securefile/local/sing/common/metadata"
+	N "github.com/konglong147/securefile/local/sing/common/network"
+	"github.com/konglong147/securefile/local/sing/protocol/socks"
 )
 
 type ProxyListener struct {
 	ctx           context.Context
-	logger        log.ContextLogger
 	dialer        N.Dialer
 	tcpListener   *net.TCPListener
 	username      string
@@ -26,7 +25,7 @@ type ProxyListener struct {
 	authenticator *auth.Authenticator
 }
 
-func NewProxyListener(ctx context.Context, logger log.ContextLogger, dialer N.Dialer) *ProxyListener {
+func NewProxyListener(ctx context.Context, dialer N.Dialer) *ProxyListener {
 	var usernameB [64]byte
 	var passwordB [64]byte
 	rand.Read(usernameB[:])
@@ -35,7 +34,6 @@ func NewProxyListener(ctx context.Context, logger log.ContextLogger, dialer N.Di
 	password := hex.EncodeToString(passwordB[:])
 	return &ProxyListener{
 		ctx:           ctx,
-		logger:        logger,
 		dialer:        dialer,
 		authenticator: auth.NewAuthenticator([]auth.User{{Username: username, Password: password}}),
 		username:      username,
@@ -85,10 +83,8 @@ func (l *ProxyListener) acceptLoop() {
 			hErr := l.accept(ctx, tcpConn)
 			if hErr != nil {
 				if E.IsClosedOrCanceled(hErr) {
-					l.logger.DebugContext(ctx, E.Cause(hErr, "proxy connection closed"))
 					return
 				}
-				l.logger.ErrorContext(ctx, E.Cause(hErr, "proxy"))
 			}
 		}()
 	}
@@ -102,7 +98,6 @@ func (l *ProxyListener) NewConnection(ctx context.Context, conn net.Conn, upstre
 	var metadata adapter.InboundContext
 	metadata.Network = N.NetworkTCP
 	metadata.Destination = upstreamMetadata.Destination
-	l.logger.InfoContext(ctx, "proxy connection to ", metadata.Destination)
 	return NewConnection(ctx, l.dialer, conn, metadata)
 }
 
@@ -110,6 +105,5 @@ func (l *ProxyListener) NewPacketConnection(ctx context.Context, conn N.PacketCo
 	var metadata adapter.InboundContext
 	metadata.Network = N.NetworkUDP
 	metadata.Destination = upstreamMetadata.Destination
-	l.logger.InfoContext(ctx, "proxy packet connection to ", metadata.Destination)
 	return NewPacketConnection(ctx, l.dialer, conn, metadata)
 }

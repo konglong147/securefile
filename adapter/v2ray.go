@@ -4,8 +4,8 @@ import (
 	"context"
 	"net"
 
-	E "github.com/sagernet/sing/common/exceptions"
-	N "github.com/sagernet/sing/common/network"
+	E "github.com/konglong147/securefile/local/sing/common/exceptions"
+	N "github.com/konglong147/securefile/local/sing/common/network"
 )
 
 type V2RayServerTransport interface {
